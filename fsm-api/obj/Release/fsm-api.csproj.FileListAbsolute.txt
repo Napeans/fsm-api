@@ -204,3 +204,14 @@ D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\obj\Release\fsm-api.csproj.CoreCompileIn
 D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\obj\Release\fsm-api.csproj.CopyComplete
 D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\obj\Release\fsm-api.dll
 D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\obj\Release\fsm-api.pdb
+D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\Microsoft.Owin.dll
+D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\Microsoft.Owin.Host.SystemWeb.dll
+D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\Microsoft.Owin.Security.dll
+D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\Microsoft.Owin.Security.Jwt.dll
+D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\Microsoft.Owin.Security.OAuth.dll
+D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\Owin.dll
+D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\Microsoft.Owin.xml
+D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\Microsoft.Owin.Host.SystemWeb.xml
+D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\Microsoft.Owin.Security.xml
+D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\Microsoft.Owin.Security.Jwt.xml
+D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\Microsoft.Owin.Security.OAuth.xml

@@ -1,4 +1,6 @@
-﻿using fsm_api.Repository;
+﻿using Dapper;
+using fsm_api.Models;
+using fsm_api.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +27,25 @@ namespace fsm_api.Controllers
         public async Task<IHttpActionResult> GetMyJobs()
         {
             var result = await _dal.GetMyJobs();
+
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("GetItems")]
+        public async Task<IHttpActionResult> GetItems()
+        {
+            var result = await _dal.GetItems();
+
+            return Ok(result);
+        }
+
+
+        [HttpPost]
+        [Route("CreateQuotation")]
+        public async Task<IHttpActionResult> CreateQuotation(CreateQuotation createQuotation)
+        {
+            var result = await _dal.CreateQuotation(createQuotation);
 
             return Ok(result);
         }

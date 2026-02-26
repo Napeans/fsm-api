@@ -36,6 +36,37 @@ e.AddressLine1+','+e.Area+','+e.City+','+e.[State]+','+e.Pincode as [Address],e.
             return list.ToList();
         }
 
+
+        public async Task<List<Items>> GetItems()
+        {
+            var parameters = new DynamicParameters();
+
+            string query = @"SELECT * FROM Items WHERE IsActive=1";
+
+
+            var list = await _dataService.GetAllAsync<Items>(query, parameters);
+
+            return list.ToList();
+        }
+
+        public async Task<int> CreateQuotation(CreateQuotation createQuotation)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@JobId", createQuotation.JobId);
+            parameters.Add("@SubTotal", createQuotation.SubTotal);
+            parameters.Add("@DiscountValue", createQuotation.DiscountValue);
+            parameters.Add("@CGST", createQuotation.CGST);
+            parameters.Add("@SGST", createQuotation.SGST);
+            parameters.Add("@TotalAmount", createQuotation.TotalAmount);
+            parameters.Add("@Status", createQuotation.Status);
+            parameters.Add("@CreatedBy", createQuotation.CreatedBy);
+            parameters.Add("@Items", createQuotation.Items);
+
+
+            return await _dataService.ExecuteAsync("Sp_CreateQuotation", parameters);
+        }
+
+
         //public async Task<(List<Mst_Scrap_Type>, List<ProductDetailsModel>)> GetProductDetails(int CityId)
         //{
         //    var parameters = new DynamicParameters();

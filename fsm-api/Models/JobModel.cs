@@ -17,6 +17,8 @@ namespace fsm_api.Models
         public decimal Latitude { get; set; }
         public decimal Longitude { get; set; }
         public string JobStatus { get; set; }
+
+        public string CurrentButtion { get; set; }
     }
 
     public class CreateQuotation
@@ -34,6 +36,15 @@ namespace fsm_api.Models
 
         public int CreatedBy { get; set; }
         public string Items { get; set; }
+    }
+
+
+    public class UpdateStatusModel
+    {
+        public int JobId { get; set; }
+        public string Status { get; set; }
+        public decimal Latitude { get; set; }
+        public decimal Longitude { get; set; }
     }
     public class Items
     {

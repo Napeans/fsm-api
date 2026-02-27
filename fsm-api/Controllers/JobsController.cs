@@ -49,5 +49,15 @@ namespace fsm_api.Controllers
 
             return Ok(result);
         }
+
+
+        [HttpPost]
+        [Route("UpdateSatus")]
+        public async Task<IHttpActionResult> UpdateSatus(UpdateStatusModel updateStatusModel)
+        {
+            var result = await _dal.UpdateSatus(updateStatusModel);
+
+            return Ok(result);
+        }
     }
 }

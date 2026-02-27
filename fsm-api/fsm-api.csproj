@@ -159,6 +159,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Common\CommonMentods.cs" />
     <Compile Include="Common\DapperDataService.cs" />
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\JobsController.cs" />

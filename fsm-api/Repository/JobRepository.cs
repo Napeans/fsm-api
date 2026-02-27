@@ -21,17 +21,9 @@ namespace fsm_api.Repository
         public async Task<List<JobsModel>> GetMyJobs()
         {
             var parameters = new DynamicParameters();
+            parameters.Add("@UserID", CommonMentods.UserId);
 
-            string query = @"SELECT JobId,[JobNumber],CustomerName,MobileNo,d.ServiceName,a.ScheduledOn,
-e.AddressLine1+','+e.Area+','+e.City+','+e.[State]+','+e.Pincode as [Address],e.[Latitude],e.[Longitude],a.JobStatus
-
-  FROM [Jobs] as a inner join [Customers] as b on a.[CustomerId]=b.[CustomerId]
-  inner join [Leads] as c on c.LeadId=a.LeadId
-  inner join [ServiceTypes] as d on d.ServiceTypeId=c.ServiceTypeId
-  inner join CustomerAddresses as e on e.CustomerAddressId=c.CustomerAddressId";
-
-
-            var list = await _dataService.GetAllAsync<JobsModel>(query,parameters);
+            var list = await _dataService.GetAllAsync<JobsModel>("Sp_GetMyJobs", parameters);
 
             return list.ToList();
         }
@@ -64,6 +56,21 @@ e.AddressLine1+','+e.Area+','+e.City+','+e.[State]+','+e.Pincode as [Address],e.
 
 
             return await _dataService.ExecuteAsync("Sp_CreateQuotation", parameters);
+        }
+
+
+
+        public async Task<int> UpdateSatus(UpdateStatusModel updateStatusModel)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@UserID", CommonMentods.UserId);
+            parameters.Add("@JobId", updateStatusModel.JobId);
+            parameters.Add("@Status", updateStatusModel.Status);
+            parameters.Add("@Latitude", updateStatusModel.Latitude);
+            parameters.Add("@Longitude", updateStatusModel.Longitude);
+
+
+            return await _dataService.ExecuteAsync("Sp_UpdateStatus", parameters);
         }
 
 

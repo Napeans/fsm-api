@@ -3,6 +3,7 @@ using fsm_api.Common;
 using fsm_api.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -21,20 +22,152 @@ namespace fsm_api.Repository
         public async Task<List<JobsModel>> GetMyJobs()
         {
             var parameters = new DynamicParameters();
+            parameters.Add("@UserID", CommonMentods.UserId);
 
-            string query = @"SELECT JobId,[JobNumber],CustomerName,MobileNo,d.ServiceName,a.ScheduledOn,
-e.AddressLine1+','+e.Area+','+e.City+','+e.[State]+','+e.Pincode as [Address],e.[Latitude],e.[Longitude],a.JobStatus
-
-  FROM [Jobs] as a inner join [Customers] as b on a.[CustomerId]=b.[CustomerId]
-  inner join [Leads] as c on c.LeadId=a.LeadId
-  inner join [ServiceTypes] as d on d.ServiceTypeId=c.ServiceTypeId
-  inner join CustomerAddresses as e on e.CustomerAddressId=c.CustomerAddressId";
-
-
-            var list = await _dataService.GetAllAsync<JobsModel>(query,parameters);
+            var list = await _dataService.GetAllAsync<JobsModel>("Sp_GetMyJobs", parameters);
 
             return list.ToList();
         }
+
+
+        public async Task<List<Items>> GetItems()
+        {
+            var parameters = new DynamicParameters();
+
+            string query = @"SELECT * FROM Items WHERE IsActive=1";
+
+
+            var list = await _dataService.GetAllAsync<Items>(query, parameters);
+
+            return list.ToList();
+        }
+        public async Task<List<QuotationItem>> GetQuotationItems(int QuotationId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@QuotationId", QuotationId);
+            string query = @"select a.QuotationItemId,a.ItemId,b.ItemName,a.UnitPrice,a.Quantity,a.TotalPrice from [QuotationItems] 
+as a inner join [Items] as b on a.ItemId=b.ItemId
+WHERE QuotationId=@QuotationId
+";
+
+
+            var list = await _dataService.GetAllAsync<QuotationItem>(query, parameters);
+
+            return list.ToList();
+        }
+
+
+        public async Task<List<JobMediaResponseModel>> GetJobMedia(int JobId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@JobId", JobId);
+            string query = @"SELECT MediaId, MediaData,Flag FROM JobMedia WHERE JobId = @JobId";
+
+
+            var list = await _dataService.GetAllAsync<JobMediaModel>(query, parameters);
+
+            var result = list.ToList();
+
+            var mediaList = new List<JobMediaResponseModel>();
+
+            foreach (var item in result)
+            {
+                byte[] imageBytes = item.MediaData;
+
+                string base64String = Convert.ToBase64String(imageBytes);
+
+                mediaList.Add(new JobMediaResponseModel
+                {
+                    MediaId = item.MediaId,
+                    Base64Image = base64String,
+                    Flag=item.Flag
+                });
+            }
+
+            return mediaList;
+        }
+
+        public async Task<int> CreateQuotation(CreateQuotation createQuotation)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@JobId", createQuotation.JobId);
+            parameters.Add("@SubTotal", createQuotation.SubTotal);
+            parameters.Add("@DiscountValue", createQuotation.DiscountValue);
+            parameters.Add("@CGST", createQuotation.CGST);
+            parameters.Add("@SGST", createQuotation.SGST);
+            parameters.Add("@TotalAmount", createQuotation.TotalAmount);
+            parameters.Add("@Status", createQuotation.Status);
+            parameters.Add("@CreatedBy", CommonMentods.UserId);
+            parameters.Add("@Items", createQuotation.Items);
+
+
+            return await _dataService.ExecuteAsync("Sp_CreateQuotation", parameters);
+        }
+        public async Task<int> DeleteJobMedia(int MediaId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@MediaId", MediaId);
+
+            return await _dataService.ExecuteAsync("delete from [JobMedia] where MediaId=@MediaId", parameters);
+        }
+        public async Task<int> SaveJobJobMedia(JobMediaModel jobMediaModel)
+        {
+            var table = new DataTable();
+            table.Columns.Add("JobId", typeof(int));
+            table.Columns.Add("MediaData", typeof(byte[]));
+            table.Columns.Add("UploadedBy", typeof(int));
+
+            foreach (var base64Image in jobMediaModel.MediaDatas)
+            {
+                if (string.IsNullOrEmpty(base64Image))
+                    continue;
+
+                var cleanBase64 = base64Image.Contains(",")
+                    ? base64Image.Substring(base64Image.IndexOf(",") + 1)
+                    : base64Image;
+
+                byte[] imageBytes = Convert.FromBase64String(cleanBase64);
+
+                table.Rows.Add(jobMediaModel.JobId, imageBytes, CommonMentods.UserId);
+            }
+
+            var parameters = new DynamicParameters();
+            parameters.Add("@JobMediaList", table.AsTableValuedParameter("JobMediaType"));
+            parameters.Add("@Flag", jobMediaModel.Flag);
+            parameters.Add("@Comments", jobMediaModel.Comments??"");
+            parameters.Add("@SignedBy", jobMediaModel.SignedBy??"");
+            return await _dataService.ExecuteAsync(
+                "InsertJobMediaBulk",
+                parameters);
+        }
+        public async Task<int> AddOrRemoveQuotationItems(QuotationItemsModel quotationItemsModel)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@QuotationId", quotationItemsModel.QuotationId);
+            parameters.Add("@QuotationItemId", quotationItemsModel.QuotationItemId);
+            parameters.Add("@ItemId", quotationItemsModel.ItemId);
+            parameters.Add("@Quantity", quotationItemsModel.Quantity);
+            parameters.Add("@Flag", quotationItemsModel.Flag);
+
+
+            return await _dataService.ExecuteAsync("Sp_AddOrRemoveQuotationItems", parameters);
+        }
+
+        
+
+        public async Task<int> UpdateSatus(UpdateStatusModel updateStatusModel)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@UserID", CommonMentods.UserId);
+            parameters.Add("@JobId", updateStatusModel.JobId);
+            parameters.Add("@Status", updateStatusModel.Status);
+            parameters.Add("@Latitude", updateStatusModel.Latitude);
+            parameters.Add("@Longitude", updateStatusModel.Longitude);
+
+
+            return await _dataService.ExecuteAsync("Sp_UpdateStatus", parameters);
+        }
+
 
         //public async Task<(List<Mst_Scrap_Type>, List<ProductDetailsModel>)> GetProductDetails(int CityId)
         //{

@@ -134,7 +134,8 @@ WHERE QuotationId=@QuotationId
             var parameters = new DynamicParameters();
             parameters.Add("@JobMediaList", table.AsTableValuedParameter("JobMediaType"));
             parameters.Add("@Flag", jobMediaModel.Flag);
-
+            parameters.Add("@Comments", jobMediaModel.Comments??"");
+            parameters.Add("@SignedBy", jobMediaModel.SignedBy??"");
             return await _dataService.ExecuteAsync(
                 "InsertJobMediaBulk",
                 parameters);

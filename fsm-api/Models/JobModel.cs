@@ -31,6 +31,8 @@ namespace fsm_api.Models
 
         public byte[] MediaData { get; set; }
         public string Flag { get; set; }
+        public string Comments { get; set; }
+        public string SignedBy { get; set; }
     }
     public class CreateQuotation
     {

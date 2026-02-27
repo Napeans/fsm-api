@@ -61,7 +61,7 @@ WHERE QuotationId=@QuotationId
         {
             var parameters = new DynamicParameters();
             parameters.Add("@JobId", JobId);
-            string query = @"SELECT MediaId, MediaData FROM JobMedia WHERE JobId = @JobId";
+            string query = @"SELECT MediaId, MediaData,Flag FROM JobMedia WHERE JobId = @JobId";
 
 
             var list = await _dataService.GetAllAsync<JobMediaModel>(query, parameters);
@@ -79,7 +79,8 @@ WHERE QuotationId=@QuotationId
                 mediaList.Add(new JobMediaResponseModel
                 {
                     MediaId = item.MediaId,
-                    Base64Image = base64String
+                    Base64Image = base64String,
+                    Flag=item.Flag
                 });
             }
 
@@ -126,6 +127,7 @@ WHERE QuotationId=@QuotationId
 
             var parameters = new DynamicParameters();
             parameters.Add("@JobMediaList", table.AsTableValuedParameter("JobMediaType"));
+            parameters.Add("@Flag", jobMediaModel.Flag);
 
             return await _dataService.ExecuteAsync(
                 "InsertJobMediaBulk",

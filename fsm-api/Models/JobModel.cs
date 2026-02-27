@@ -30,6 +30,7 @@ namespace fsm_api.Models
         public string[] MediaDatas { get; set; }
 
         public byte[] MediaData { get; set; }
+        public string Flag { get; set; }
     }
     public class CreateQuotation
     {
@@ -51,6 +52,7 @@ namespace fsm_api.Models
     {
         public int MediaId { get; set; }
         public string Base64Image { get; set; }
+        public string Flag { get; set; }
     }
     public class QuotationItemsModel{
         public int QuotationId { get; set; }

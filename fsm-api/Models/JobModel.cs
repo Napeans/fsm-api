@@ -23,6 +23,10 @@ namespace fsm_api.Models
         public DateTime? StartTime { get; set; }
 
         public int QuotationId { get; set; }
+
+        public decimal TotalAmount { get; set; }
+
+        public DateTime?  EndTime { get; set; }
     }
     public class JobMediaModel {
         public int JobId { get; set; }
@@ -33,6 +37,10 @@ namespace fsm_api.Models
         public string Flag { get; set; }
         public string Comments { get; set; }
         public string SignedBy { get; set; }
+        public decimal Latitude { get; set; }
+        public decimal Longitude { get; set; }
+
+        public int UserId { get; set; }
     }
     public class CreateQuotation
     {

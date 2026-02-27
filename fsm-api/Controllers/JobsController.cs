@@ -40,6 +40,15 @@ namespace fsm_api.Controllers
             return Ok(result);
         }
 
+        [HttpGet]
+        [Route("GetQuotationItems/{quotationId:int}")]
+        public async Task<IHttpActionResult> GetQuotationItems(int QuotationId)
+        {
+            var result = await _dal.GetQuotationItems(QuotationId);
+
+            return Ok(result);
+        }
+
 
         [HttpPost]
         [Route("CreateQuotation")]

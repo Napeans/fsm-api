@@ -40,6 +40,20 @@ namespace fsm_api.Repository
 
             return list.ToList();
         }
+        public async Task<List<Items>> GetQuotationItems(int QuotationId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@QuotationId", QuotationId);
+            string query = @"select a.ItemId,b.ItemName,a.UnitPrice,a.Quantity,a.TotalPrice from [QuotationItems] 
+as a inner join [Items] as b on a.ItemId=b.ItemId
+WHERE QuotationId=@QuotationId
+";
+
+
+            var list = await _dataService.GetAllAsync<Items>(query, parameters);
+
+            return list.ToList();
+        }
 
         public async Task<int> CreateQuotation(CreateQuotation createQuotation)
         {

@@ -58,8 +58,13 @@ namespace fsm_api.Controllers
 
             return Ok(result);
         }
+        [HttpPost]
+        [Route("AddOrRemoveQuotationItems")]
+        public async Task<IHttpActionResult> AddOrRemoveQuotationItems(QuotationItemsModel quotationItemsModel) {
+            var result = await _dal.AddOrRemoveQuotationItems(quotationItemsModel);
 
-
+            return Ok(result);
+        }
         [HttpPost]
         [Route("UpdateSatus")]
         public async Task<IHttpActionResult> UpdateSatus(UpdateStatusModel updateStatusModel)

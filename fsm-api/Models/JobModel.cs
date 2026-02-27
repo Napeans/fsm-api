@@ -21,6 +21,8 @@ namespace fsm_api.Models
         public string CurrentButtion { get; set; }
 
         public DateTime? StartTime { get; set; }
+
+        public int QuotationId { get; set; }
     }
 
     public class CreateQuotation
@@ -40,7 +42,16 @@ namespace fsm_api.Models
         public string Items { get; set; }
     }
 
+    public class QuotationItemsModel{
+        public int QuotationId { get; set; }
+        public int QuotationItemId { get; set; }
+        public int ItemId { get; set; }
+        public decimal Quantity { get; set; }
+        public string Flag { get; set; }
 
+        
+
+    }
     public class UpdateStatusModel
     {
         public int JobId { get; set; }
@@ -52,6 +63,8 @@ namespace fsm_api.Models
 
     public class QuotationItem {
         public int ItemId { get; set; }
+
+        public int QuotationItemId { get; set; }
         public string ItemName { get; set; }
         public decimal UnitPrice { get; set; }
         public decimal Quantity { get; set; }

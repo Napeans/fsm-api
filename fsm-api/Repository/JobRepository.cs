@@ -40,17 +40,17 @@ namespace fsm_api.Repository
 
             return list.ToList();
         }
-        public async Task<List<Items>> GetQuotationItems(int QuotationId)
+        public async Task<List<QuotationItem>> GetQuotationItems(int QuotationId)
         {
             var parameters = new DynamicParameters();
             parameters.Add("@QuotationId", QuotationId);
-            string query = @"select a.ItemId,b.ItemName,a.UnitPrice,a.Quantity,a.TotalPrice from [QuotationItems] 
+            string query = @"select a.QuotationItemId,a.ItemId,b.ItemName,a.UnitPrice,a.Quantity,a.TotalPrice from [QuotationItems] 
 as a inner join [Items] as b on a.ItemId=b.ItemId
 WHERE QuotationId=@QuotationId
 ";
 
 
-            var list = await _dataService.GetAllAsync<Items>(query, parameters);
+            var list = await _dataService.GetAllAsync<QuotationItem>(query, parameters);
 
             return list.ToList();
         }
@@ -71,8 +71,20 @@ WHERE QuotationId=@QuotationId
 
             return await _dataService.ExecuteAsync("Sp_CreateQuotation", parameters);
         }
+        public async Task<int> AddOrRemoveQuotationItems(QuotationItemsModel quotationItemsModel)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@QuotationId", quotationItemsModel.QuotationId);
+            parameters.Add("@QuotationItemId", quotationItemsModel.QuotationItemId);
+            parameters.Add("@ItemId", quotationItemsModel.ItemId);
+            parameters.Add("@Quantity", quotationItemsModel.Quantity);
+            parameters.Add("@Flag", quotationItemsModel.Flag);
 
 
+            return await _dataService.ExecuteAsync("Sp_AddOrRemoveQuotationItems", parameters);
+        }
+
+        
 
         public async Task<int> UpdateSatus(UpdateStatusModel updateStatusModel)
         {

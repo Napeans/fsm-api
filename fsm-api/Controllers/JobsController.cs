@@ -48,8 +48,14 @@ namespace fsm_api.Controllers
 
             return Ok(result);
         }
+        [HttpPost]
+        [Route("SaveJobJobMedia")]
+        public async Task<IHttpActionResult> SaveJobJobMedia(JobMediaModel jobMediaModel)
+        {
+            var result = await _dal.SaveJobJobMedia(jobMediaModel);
 
-
+            return Ok(result);
+        }
         [HttpPost]
         [Route("CreateQuotation")]
         public async Task<IHttpActionResult> CreateQuotation(CreateQuotation createQuotation)
@@ -62,6 +68,15 @@ namespace fsm_api.Controllers
         [Route("AddOrRemoveQuotationItems")]
         public async Task<IHttpActionResult> AddOrRemoveQuotationItems(QuotationItemsModel quotationItemsModel) {
             var result = await _dal.AddOrRemoveQuotationItems(quotationItemsModel);
+
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("GetJobMedia/{jobId:int}")]
+        public async Task<IHttpActionResult> GetJobMedia(int jobId)
+        {
+            var result = await _dal.GetJobMedia(jobId);
 
             return Ok(result);
         }

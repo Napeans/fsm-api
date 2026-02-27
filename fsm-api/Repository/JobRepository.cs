@@ -3,6 +3,7 @@ using fsm_api.Common;
 using fsm_api.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -55,6 +56,36 @@ WHERE QuotationId=@QuotationId
             return list.ToList();
         }
 
+
+        public async Task<List<JobMediaResponseModel>> GetJobMedia(int JobId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@JobId", JobId);
+            string query = @"SELECT MediaId, MediaData FROM JobMedia WHERE JobId = @JobId";
+
+
+            var list = await _dataService.GetAllAsync<JobMediaModel>(query, parameters);
+
+            var result = list.ToList();
+
+            var mediaList = new List<JobMediaResponseModel>();
+
+            foreach (var item in result)
+            {
+                byte[] imageBytes = item.MediaData;
+
+                string base64String = Convert.ToBase64String(imageBytes);
+
+                mediaList.Add(new JobMediaResponseModel
+                {
+                    MediaId = item.MediaId,
+                    Base64Image = base64String
+                });
+            }
+
+            return mediaList;
+        }
+
         public async Task<int> CreateQuotation(CreateQuotation createQuotation)
         {
             var parameters = new DynamicParameters();
@@ -65,11 +96,40 @@ WHERE QuotationId=@QuotationId
             parameters.Add("@SGST", createQuotation.SGST);
             parameters.Add("@TotalAmount", createQuotation.TotalAmount);
             parameters.Add("@Status", createQuotation.Status);
-            parameters.Add("@CreatedBy", createQuotation.CreatedBy);
+            parameters.Add("@CreatedBy", CommonMentods.UserId);
             parameters.Add("@Items", createQuotation.Items);
 
 
             return await _dataService.ExecuteAsync("Sp_CreateQuotation", parameters);
+        }
+
+        public async Task<int> SaveJobJobMedia(JobMediaModel jobMediaModel)
+        {
+            var table = new DataTable();
+            table.Columns.Add("JobId", typeof(int));
+            table.Columns.Add("MediaData", typeof(byte[]));
+            table.Columns.Add("UploadedBy", typeof(int));
+
+            foreach (var base64Image in jobMediaModel.MediaDatas)
+            {
+                if (string.IsNullOrEmpty(base64Image))
+                    continue;
+
+                var cleanBase64 = base64Image.Contains(",")
+                    ? base64Image.Substring(base64Image.IndexOf(",") + 1)
+                    : base64Image;
+
+                byte[] imageBytes = Convert.FromBase64String(cleanBase64);
+
+                table.Rows.Add(jobMediaModel.JobId, imageBytes, CommonMentods.UserId);
+            }
+
+            var parameters = new DynamicParameters();
+            parameters.Add("@JobMediaList", table.AsTableValuedParameter("JobMediaType"));
+
+            return await _dataService.ExecuteAsync(
+                "InsertJobMediaBulk",
+                parameters);
         }
         public async Task<int> AddOrRemoveQuotationItems(QuotationItemsModel quotationItemsModel)
         {

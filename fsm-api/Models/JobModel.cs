@@ -24,7 +24,13 @@ namespace fsm_api.Models
 
         public int QuotationId { get; set; }
     }
+    public class JobMediaModel {
+        public int JobId { get; set; }
+        public int MediaId { get; set; }
+        public string[] MediaDatas { get; set; }
 
+        public byte[] MediaData { get; set; }
+    }
     public class CreateQuotation
     {
         public int JobId { get; set; }
@@ -41,7 +47,11 @@ namespace fsm_api.Models
         public int CreatedBy { get; set; }
         public string Items { get; set; }
     }
-
+    public class JobMediaResponseModel
+    {
+        public int MediaId { get; set; }
+        public string Base64Image { get; set; }
+    }
     public class QuotationItemsModel{
         public int QuotationId { get; set; }
         public int QuotationItemId { get; set; }

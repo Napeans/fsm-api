@@ -103,7 +103,13 @@ WHERE QuotationId=@QuotationId
 
             return await _dataService.ExecuteAsync("Sp_CreateQuotation", parameters);
         }
+        public async Task<int> DeleteJobMedia(int MediaId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@MediaId", MediaId);
 
+            return await _dataService.ExecuteAsync("delete from [JobMedia] where MediaId=@MediaId", parameters);
+        }
         public async Task<int> SaveJobJobMedia(JobMediaModel jobMediaModel)
         {
             var table = new DataTable();

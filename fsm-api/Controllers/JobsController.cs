@@ -73,6 +73,14 @@ namespace fsm_api.Controllers
         }
 
         [HttpGet]
+        [Route("DeleteJobMedia/{MediaId:int}")]
+        public async Task<IHttpActionResult> DeleteJobMedia(int MediaId) {
+            var result = await _dal.DeleteJobMedia(MediaId);
+
+            return Ok(result);
+        }
+
+        [HttpGet]
         [Route("GetJobMedia/{jobId:int}")]
         public async Task<IHttpActionResult> GetJobMedia(int jobId)
         {

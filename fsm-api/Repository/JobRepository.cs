@@ -126,13 +126,9 @@ WHERE QuotationId=@QuotationId
         {
             var parameters = new DynamicParameters();
             parameters.Add("@JobId", createQuotation.JobId);
-            parameters.Add("@SubTotal", createQuotation.SubTotal);
             parameters.Add("@DiscountValue", createQuotation.DiscountValue);
-            parameters.Add("@CGST", createQuotation.CGST);
-            parameters.Add("@SGST", createQuotation.SGST);
-            parameters.Add("@TotalAmount", createQuotation.TotalAmount);
-            parameters.Add("@Status", createQuotation.Status);
             parameters.Add("@CreatedBy", CommonMentods.UserId);
+            parameters.Add("@Status", createQuotation.Status);
             parameters.Add("@Items", createQuotation.Items);
 
 

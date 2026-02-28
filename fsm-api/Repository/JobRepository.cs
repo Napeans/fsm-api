@@ -45,7 +45,7 @@ namespace fsm_api.Repository
         {
             var parameters = new DynamicParameters();
             parameters.Add("@QuotationId", QuotationId);
-            string query = @"select a.QuotationItemId,a.ItemId,b.ItemName,a.UnitPrice,a.Quantity,a.TotalPrice from [QuotationItems] 
+            string query = @"select a.QuotationItemId,a.ItemId,b.ItemName,a.UnitPrice,a.Quantity from [QuotationItems] 
 as a inner join [Items] as b on a.ItemId=b.ItemId
 WHERE QuotationId=@QuotationId
 ";

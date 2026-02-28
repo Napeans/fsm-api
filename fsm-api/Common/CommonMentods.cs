@@ -120,30 +120,54 @@ Date: {model.EstimateDate:dd-MM-yyyy}
 {rows}
 </table>
 
-<table style='width:350px; float:right; margin-top:10px;'>
+<table style='width:100%; margin-top:20px;'>
 <tr>
-    <td>Sub Total</td>
-    <td>₹ {subTotal:N2}</td>
+<td style='width:60%; vertical-align:top; padding:10px;text-align: left;'>
+
+<strong>Description</strong><br>
+{model.Description}<br><br>
+
+<strong>{model.BranchName}</strong><br>
+{model.VisitDetails}<br><br>
+
+<strong>Invoice Amount In Words</strong><br>
+{model.AmountInWords}<br><br>
+
+<strong>Terms And Conditions</strong><br>
+{model.Terms}
+
+</td>
+
+<td style='width:40%; vertical-align:top;'>
+
+<table style='width:100%; border-collapse:collapse;'>
+<tr>
+    <td style='text-align:left;'>Sub Total</td>
+    <td style='text-align:right;'>₹ {subTotal:N2}</td>
 </tr>
 <tr>
-    <td>Discount</td>
-    <td>- ₹ {discount:N2}</td>
+    <td style='text-align:left;'>Discount</td>
+    <td style='text-align:right;'>- ₹ {discount:N2}</td>
 </tr>
 <tr>
-    <td>Taxable Amount</td>
-    <td>₹ {taxableAmount:N2}</td>
+    <td style='text-align:left;'>Taxable Amount</td>
+    <td style='text-align:right;'>₹ {taxableAmount:N2}</td>
 </tr>
 <tr>
-    <td>SGST @ 9%</td>
-    <td>₹ {sgst:N2}</td>
+    <td style='text-align:left;'>SGST @ 9%</td>
+    <td style='text-align:right;'>₹ {sgst:N2}</td>
 </tr>
 <tr>
-    <td>CGST @ 9%</td>
-    <td>₹ {cgst:N2}</td>
+    <td style='text-align:left;'>CGST @ 9%</td>
+    <td style='text-align:right;'>₹ {cgst:N2}</td>
 </tr>
-<tr class='total-row'>
-    <td>Grand Total</td>
-    <td>₹ {grandTotal:N2}</td>
+<tr style='background:#dcd0ff; font-weight:bold;'>
+    <td style='text-align:left;'>Grand Total</td>
+    <td style='text-align:right;'>₹ {grandTotal:N2}</td>
+</tr>
+</table>
+
+</td>
 </tr>
 </table>
 

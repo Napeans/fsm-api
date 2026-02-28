@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace fsm_api
 {
@@ -10,6 +11,10 @@ namespace fsm_api
     {
         public static void Register(HttpConfiguration config)
         {
+            // Enable CORS globally
+            var cors = new EnableCorsAttribute("*", "*", "*");
+            config.EnableCors(cors);
+
             // Enable attribute routing
             config.MapHttpAttributeRoutes();
 

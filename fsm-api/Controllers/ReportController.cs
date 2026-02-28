@@ -24,8 +24,8 @@ namespace fsm_api.Controllers
             _dal = new JobRepository();
         }
         [HttpGet]
-        [Route("DownloadJobReport")]
-        public async Task<HttpResponseMessage> DownloadJobReport()
+        [Route("DownloadJobReport/{JobId:int}/{IsEstimate:bool}")]
+        public async Task<HttpResponseMessage> DownloadJobReport(int JobId, bool IsEstimate)
         {
             var (estimate, items) = await _dal.GetInvoiceData(1, true);
             estimate.Items = items;

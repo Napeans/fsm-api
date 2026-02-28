@@ -13,6 +13,7 @@ namespace fsm_api.Models
         public string MobileNo { get; set; }
         public string WhatsappNo { get; set; }
         public string EmailId { get; set; }
+        public string CustomerGST { get; set; }
         public List<CustomerAddressModel> Addresses { get; set; }
     }
 
@@ -28,5 +29,15 @@ namespace fsm_api.Models
         public decimal? Latitude { get; set; }
         public decimal? Longitude { get; set; }
         public bool IsDefault { get; set; }
+    }
+
+    public class CustomerCreateRequest
+    {
+        public int? CustomerId { get; set; }
+        public string CustomerName { get; set; }
+        public string MobileNo { get; set; }
+        public string WhatsappNo { get; set; }
+        public string EmailId { get; set; }
+        public  CustomerAddressModel Addresse { get; set; }
     }
 }

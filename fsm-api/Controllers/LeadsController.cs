@@ -1,4 +1,5 @@
-﻿using fsm_api.Repository;
+﻿using fsm_api.Models;
+using fsm_api.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,6 +43,15 @@ namespace fsm_api.Controllers
         {
             await _repo.ConvertToJob(id);
             return Ok();
+        }
+
+        [HttpPost]
+        [Route("create")]
+        public async Task<IHttpActionResult> Createlead(LeadCreateRequest request)
+        {
+
+            var leadId = await _repo.CreateLead(request);
+            return Ok(leadId);
         }
     }
 }

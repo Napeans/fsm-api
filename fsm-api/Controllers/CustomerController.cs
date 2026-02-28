@@ -1,4 +1,5 @@
-﻿using fsm_api.Repository;
+﻿using fsm_api.Models;
+using fsm_api.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,14 @@ namespace fsm_api.Controllers
             var result = await _dal.SearchCustomer(mobile);
 
             return Ok(result);
+        }
+
+        [HttpPost]
+        [Route("create")]
+        public async Task<IHttpActionResult> create(CustomerCreateRequest request)
+        {
+            
+            return Ok("Customer Created");
         }
     }
 }

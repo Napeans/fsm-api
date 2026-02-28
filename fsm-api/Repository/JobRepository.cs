@@ -92,6 +92,36 @@ WHERE QuotationId=@QuotationId
 
             return result;
         }
+
+        public async Task<List<JobMediaModel>> getClientDetails(int JobId)
+        {
+
+            var parameters = new DynamicParameters();
+            parameters.Add("@JobId", JobId);
+            string query = @"SELECT MediaId, MediaData,Flag FROM JobMedia WHERE JobId = @JobId";
+
+
+            var list = await _dataService.GetAllAsync<JobMediaModel>(query, parameters);
+
+            var result = list.ToList();
+
+            return result;
+        }
+
+
+        public async Task<List<ClientDetails>> GetClientDetails()
+        {
+
+            var parameters = new DynamicParameters();
+            string query = @"select top 1 * from ClientDetails";
+
+
+            var list = await _dataService.GetAllAsync<ClientDetails>(query, parameters);
+
+            var result = list.ToList();
+
+            return result;
+        }
         public async Task<int> CreateQuotation(CreateQuotation createQuotation)
         {
             var parameters = new DynamicParameters();

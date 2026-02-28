@@ -37,6 +37,17 @@ namespace fsm_api.Models
         // 🔥 Changed here
         public List<byte[]> BeforeImages { get; set; }
         public List<byte[]> AfterImages { get; set; }
+
+        public byte[] CompanyLogo { get; set; }
+}
+
+    public class ClientDetails
+    {
+        public int ClientId { get; set; }
+        public string ClientName { get; set; }
+        public string ClientUPI { get; set; }
+
+        public byte[] ClientLogo { get; set; }
     }
     public class JobsModel
     {

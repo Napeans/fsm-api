@@ -28,6 +28,9 @@ namespace fsm_api.Controllers
 
             var data = await _dal.getJobMediaData(2);
 
+
+            var clientData = await _dal.GetClientDetails();
+
             var beforeImage = data
                 .Where(p => p.Flag == "B")
                 .Select(p => p.MediaData)
@@ -64,7 +67,8 @@ namespace fsm_api.Controllers
                 Notes = "PATCH THE HOLE WITH WHITE CEMENT",
                 TechnicianNotes = "ALL AC FOAM JET SERVICE DONE...",
                 BeforeImages = beforeImage,
-                AfterImages = afterImage
+                AfterImages = afterImage,
+                CompanyLogo= clientData.FirstOrDefault().ClientLogo
             };
 
             var service = new JobReportPdfService();

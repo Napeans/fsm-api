@@ -1,8 +1,10 @@
 ﻿using fsm_api.Common;
 using fsm_api.Models;
 using fsm_api.Repository;
+using iText.Html2pdf;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -23,7 +25,7 @@ namespace fsm_api.Controllers
         }
         [HttpGet]
         [Route("DownloadJobReport")]
-        public async Task<bool> DownloadJobReport()
+        public async Task<HttpResponseMessage> DownloadJobReport()
         {
             var (estimate, items) = await _dal.GetInvoiceData(1, true);
             estimate.Items = items;
@@ -33,7 +35,7 @@ namespace fsm_api.Controllers
 upiId: estimate.ClientUPI,
 payeeName: estimate.CompanyName,
 amount: subTotal,
-note: "Estimate "+ estimate.QuotationNumber
+note: "Estimate " + estimate.QuotationNumber
 );
 
 
@@ -45,11 +47,33 @@ note: "Estimate "+ estimate.QuotationNumber
             estimate.QrBase64 = qrBase64;
             estimate.LogoBase64 = Convert.ToBase64String(estimate.ClientLogo);
             string html = CommonMentods.BuildHtml(estimate);
-            GeneratePDFs.Convert(html, @"D:\Estimate.pdf");
 
+            byte[] pdfBytes;
 
-          
-            return true;   // 🔥 IMPORTANT
+            using (MemoryStream ms = new MemoryStream())
+            {
+                ConverterProperties prop = new ConverterProperties();
+                HtmlConverter.ConvertToPdf(html, ms, prop);
+                pdfBytes = ms.ToArray();
+            }
+
+            var result = new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new ByteArrayContent(pdfBytes)
+            };
+
+            result.Content.Headers.ContentType =
+                new MediaTypeHeaderValue("application/pdf");
+
+            result.Content.Headers.ContentDisposition =
+                new ContentDispositionHeaderValue("inline")
+                {
+                    FileName = "Estimate.pdf"
+                };
+
+            return result;
         }
+
+      
     }
 }

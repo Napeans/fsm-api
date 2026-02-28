@@ -34,8 +34,9 @@ namespace fsm_api.Models
         public string Notes { get; set; }
         public string TechnicianNotes { get; set; }
 
-        public List<string> BeforeImageUrls { get; set; }
-        public List<string> AfterImageUrls { get; set; }
+        // 🔥 Changed here
+        public List<byte[]> BeforeImages { get; set; }
+        public List<byte[]> AfterImages { get; set; }
     }
     public class JobsModel
     {

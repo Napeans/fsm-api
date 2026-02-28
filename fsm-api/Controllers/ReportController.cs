@@ -1,11 +1,13 @@
 ﻿using fsm_api.Common;
 using fsm_api.Models;
+using fsm_api.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace fsm_api.Controllers
@@ -14,10 +16,30 @@ namespace fsm_api.Controllers
     [RoutePrefix("api/report")]
     public class ReportController : ApiController
     {
+        private readonly JobRepository _dal;
+        public ReportController()
+        {
+            _dal = new JobRepository();
+        }
         [HttpGet]
         [Route("DownloadJobReport")]
-        public HttpResponseMessage DownloadJobReport()
+        public async Task<HttpResponseMessage> DownloadJobReport()
         {
+
+            var data = await _dal.getJobMediaData(2);
+
+            var beforeImage = data
+                .Where(p => p.Flag == "B")
+                .Select(p => p.MediaData)
+                .Where(p => p != null && p.Length > 0)
+                .ToList();
+
+            var afterImage = data
+                .Where(p => p.Flag == "A")
+                .Select(p => p.MediaData)
+                .Where(p => p != null && p.Length > 0)
+                .ToList();
+
             var model = new JobReportModel
             {
                 CompanyName = "APPLOGIQ",
@@ -41,14 +63,8 @@ namespace fsm_api.Controllers
                 ScopeOfWork = "SPLIT AC DEEP CLEAN-7 NOS & GAS TOPUP - 3 NOS",
                 Notes = "PATCH THE HOLE WITH WHITE CEMENT",
                 TechnicianNotes = "ALL AC FOAM JET SERVICE DONE...",
-                BeforeImageUrls = new System.Collections.Generic.List<string>
-            {
-                "https://via.placeholder.com/300"
-            },
-                AfterImageUrls = new System.Collections.Generic.List<string>
-            {
-                "https://via.placeholder.com/300"
-            }
+                BeforeImages = beforeImage,
+                AfterImages = afterImage
             };
 
             var service = new JobReportPdfService();
@@ -65,8 +81,7 @@ namespace fsm_api.Controllers
                     FileName = "JobReport.pdf"
                 };
 
-            return response;
-
+            return response;   // 🔥 IMPORTANT
         }
     }
 }

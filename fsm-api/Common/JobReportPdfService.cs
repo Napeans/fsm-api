@@ -2,6 +2,7 @@
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
+using System;
 using System.Net;
 
 namespace fsm_api.Common
@@ -17,112 +18,159 @@ namespace fsm_api.Common
                 container.Page(page =>
                 {
                     page.Size(PageSizes.A4);
-                    page.Margin(20);
+                    page.Margin(30);
+
+                    page.Header().Column(header =>
+                    {
+                        header.Item().Text($"Job Report - {model.JobNumber} {model.BookedTime}")
+                            .FontSize(18)
+                            .Bold();
+
+                        header.Item().LineHorizontal(1);
+                    });
 
                     page.Content().Column(column =>
                     {
-                        column.Spacing(8);
+                        column.Spacing(15);
 
-                        // HEADER
-                        column.Item().Text($"Job Report - {model.JobNumber} {model.BookedTime}")
-                            .FontSize(16).Bold();
-
-                        column.Item().LineHorizontal(1);
-
-                        // CONTACT INFO
-                        column.Item().Text("Contact Information").Bold();
-                        column.Item().Text($"Company: {model.CompanyName}");
-                        column.Item().Text($"Technician: {model.Technician}");
-                        column.Item().Text($"Status: {model.Status}");
-                        column.Item().Text($"Location: {model.Location}");
-
-                        column.Item().LineHorizontal(1);
-
-                        // JOB DETAILS TABLE
-                        column.Item().Text("Job Details").Bold();
-
-                        column.Item().Table(table =>
-                        {
-                            table.ColumnsDefinition(columns =>
+                        // ================= CONTACT INFORMATION BOX =================
+                        column.Item().Container()
+                            .Border(1)
+                            .Padding(10)
+                            .Column(c =>
                             {
-                                columns.RelativeColumn(1);
-                                columns.RelativeColumn(2);
+                                c.Item().Text("Contact Information").Bold().FontSize(14);
+
+                                c.Item().Text($"Company: {model.CompanyName}");
+                                c.Item().Text($"Technician: {model.Technician}");
+                                c.Item().Text($"Status: {model.Status}");
+                                c.Item().Text($"Location: {model.Location}");
                             });
 
-                            AddRow(table, "Job Number", model.JobNumber);
-                            AddRow(table, "Business Unit", model.BusinessUnit);
-                            AddRow(table, "Service Type", model.ServiceType);
-                            AddRow(table, "Booked Time", model.BookedTime);
-                            AddRow(table, "Scheduled Time", model.ScheduledTime);
-                            AddRow(table, "Booked By", model.BookedBy);
-                            AddRow(table, "Asset", model.Asset);
-                            AddRow(table, "Serial Number", model.SerialNumber);
-                            AddRow(table, "Model Number", model.ModelNumber);
-                            AddRow(table, "Job Started Time", model.JobStartedTime);
-                            AddRow(table, "Job Completed Time", model.JobCompletedTime);
-                            AddRow(table, "Total Job Time", model.TotalJobTime);
-                            AddRow(table, "No. Of Crew", model.NoOfCrew.ToString());
-                            AddRow(table, "Job Title", model.JobTitle);
-                        });
+                        // ================= JOB DETAILS TABLE BOX =================
+                        column.Item().Container()
+                            .Border(1)
+                            .Padding(10)
+                            .Column(c =>
+                            {
+                                c.Item().Text("Job Details").Bold().FontSize(14);
 
-                        column.Item().LineHorizontal(1);
+                                c.Item().Table(table =>
+                                {
+                                    table.ColumnsDefinition(columns =>
+                                    {
+                                        columns.ConstantColumn(180);
+                                        columns.RelativeColumn();
+                                    });
 
-                        // SCOPE / NOTES
-                        column.Item().Text("Scope Of Work").Bold();
-                        column.Item().Text(model.ScopeOfWork ?? "-");
+                                    AddStyledRow(table, "Job Number", model.JobNumber);
+                                    AddStyledRow(table, "Business Unit", model.BusinessUnit);
+                                    AddStyledRow(table, "Service Type", model.ServiceType);
+                                    AddStyledRow(table, "Booked Time", model.BookedTime);
+                                    AddStyledRow(table, "Scheduled Time", model.ScheduledTime);
+                                    AddStyledRow(table, "Booked By", model.BookedBy);
+                                    AddStyledRow(table, "Asset", model.Asset);
+                                    AddStyledRow(table, "Serial Number", model.SerialNumber);
+                                    AddStyledRow(table, "Model Number", model.ModelNumber);
+                                    AddStyledRow(table, "Job Started Time", model.JobStartedTime);
+                                    AddStyledRow(table, "Job Completed Time", model.JobCompletedTime);
+                                    AddStyledRow(table, "Total Job Time", model.TotalJobTime);
+                                    AddStyledRow(table, "No. Of Crew", model.NoOfCrew.ToString());
+                                    AddStyledRow(table, "Job Title", model.JobTitle);
+                                });
+                            });
 
-                        column.Item().Text("Notes").Bold();
-                        column.Item().Text(model.Notes ?? "-");
+                        // ================= TEXT SECTIONS =================
+                        AddTextSection(column, "Scope Of Work", model.ScopeOfWork);
+                        AddTextSection(column, "Notes", model.Notes);
+                        AddTextSection(column, "Technician Notes", model.TechnicianNotes);
 
-                        column.Item().Text("Technician Notes").Bold();
-                        column.Item().Text(model.TechnicianNotes ?? "-");
-
-                        // BEFORE IMAGES PAGE
-                        if (model.BeforeImageUrls != null && model.BeforeImageUrls.Count > 0)
+                        // ================= BEFORE IMAGES =================
+                        if (model.BeforeImages?.Count > 0)
                         {
                             column.Item().PageBreak();
-                            column.Item().Text("Before Images").Bold();
+
+                            column.Item().Text("Before Images")
+                                .FontSize(14)
+                                .Bold();
+
+                            column.Item().LineHorizontal(1);
 
                             column.Item().Grid(grid =>
                             {
                                 grid.Columns(2);
 
-                                foreach (var url in model.BeforeImageUrls)
+                                foreach (var imageBytes in model.BeforeImages)
                                 {
-                                    var imageBytes = DownloadImage(url);
-                                    if (imageBytes != null)
-                                        grid.Item().Padding(5).Image(imageBytes, ImageScaling.FitArea);
+                                    if (imageBytes != null && imageBytes.Length > 0)
+                                    {
+                                        grid.Item()
+                                            .Padding(5)
+                                            .Border(1)
+                                            .Height(180)
+                                            .Image(imageBytes, ImageScaling.FitArea);
+                                    }
                                 }
                             });
                         }
 
-                        // AFTER IMAGES PAGE
-                        if (model.AfterImageUrls != null && model.AfterImageUrls.Count > 0)
+                        // ================= AFTER IMAGES =================
+                        if (model.AfterImages?.Count > 0)
                         {
                             column.Item().PageBreak();
-                            column.Item().Text("After Images").Bold();
+
+                            column.Item().Text("After Images")
+                                .FontSize(14)
+                                .Bold();
+
+                            column.Item().LineHorizontal(1);
 
                             column.Item().Grid(grid =>
                             {
                                 grid.Columns(2);
 
-                                foreach (var url in model.AfterImageUrls)
+                                foreach (var imageBytes in model.AfterImages)
                                 {
-                                    var imageBytes = DownloadImage(url);
-                                    if (imageBytes != null)
-                                        grid.Item().Padding(5).Image(imageBytes, ImageScaling.FitArea);
+                                    if (imageBytes != null && imageBytes.Length > 0)
+                                    {
+                                        grid.Item()
+                                            .Padding(5)
+                                            .Border(1)
+                                            .Height(180)
+                                            .Image(imageBytes, ImageScaling.FitArea);
+                                    }
                                 }
                             });
                         }
                     });
+
+                    page.Footer()
+                        .AlignCenter()
+                        .Text(text =>
+                        {
+                            text.Span("Generated on ");
+                            text.Span(DateTime.Now.ToString("dd-MMM-yyyy HH:mm"));
+                        });
                 });
             }).GeneratePdf();
         }
 
-        private void AddRow(TableDescriptor table, string label, string value)
+        private void AddStyledRow(TableDescriptor table, string label, string value)
         {
             table.Cell().Border(1).Padding(5).Text(label).Bold();
             table.Cell().Border(1).Padding(5).Text(value ?? "-NA-");
+        }
+
+        private void AddTextSection(ColumnDescriptor column, string title, string value)
+        {
+            column.Item().Container()
+                .Border(1)
+                .Padding(10)
+                .Column(c =>
+                {
+                    c.Item().Text(title).Bold().FontSize(14);
+                    c.Item().Text(value ?? "-");
+                });
         }
 
         private byte[] DownloadImage(string url)

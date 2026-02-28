@@ -207,19 +207,20 @@ WHERE QuotationId=@QuotationId
         }
 
 
-        //public async Task<(List<Mst_Scrap_Type>, List<ProductDetailsModel>)> GetProductDetails(int CityId)
-        //{
-        //    var parameters = new DynamicParameters();
-        //    parameters.Add("@CityID", CityId);
-        //    using (var multi = await _dataService.QueryMultipleAsync(
-        //        "GETProductList",
-        //        parameters,
-        //        CommandType.StoredProcedure))
-        //    {
-        //        var scrapTypes = (await multi.ReadAsync<Mst_Scrap_Type>()).AsList();
-        //        var scrapCategories = (await multi.ReadAsync<ProductDetailsModel>()).AsList();
-        //        return (scrapTypes, scrapCategories);
-        //    }
-        //}
+        public async Task<(EstimateModel, List<EstimateItem>)> GetInvoiceData(int JobId,bool IsEstimate)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@JobId", JobId);
+            parameters.Add("@IsEstimate", IsEstimate);
+            using (var multi = await _dataService.QueryMultipleAsync(
+                "Sp_GetInvoiceData",
+                parameters,
+                CommandType.StoredProcedure))
+            {
+                var estimate = (await multi.ReadAsync<EstimateModel>()).FirstOrDefault();
+                var item = (await multi.ReadAsync<EstimateItem>()).AsList();
+                return (estimate, item);
+            }
+        }
     }
 }

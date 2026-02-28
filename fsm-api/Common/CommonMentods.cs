@@ -1,6 +1,9 @@
-﻿using QRCoder;
+﻿using fsm_api.Models;
+using QRCoder;
 using System;
+using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using System.Web;
 
 namespace fsm_api.Common
@@ -8,7 +11,131 @@ namespace fsm_api.Common
 
     public static class CommonMentods
     {
+        public static string BuildHtml(EstimateModel model)
+        {
+            StringBuilder rows = new StringBuilder();
+            int i = 1;
 
+            foreach (var item in model.Items)
+            {
+                rows.Append($@"
+<tr>
+    <td>{i++}</td>
+    <td>{item.ItemName}</td>
+    <td>{item.HSN}</td>
+    <td>{item.Quantity}</td>
+    <td>{item.Unit}</td>
+    <td>₹ {item.Price:N2}</td>
+    <td>₹ {item.Amount:N2}</td>
+</tr>");
+            }
+
+            decimal subTotal = model.Items.Sum(x => x.Amount);
+
+            return $@"
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='UTF-8'>
+<style>
+body {{ font-family: Arial; margin:20px; font-size:13px; }}
+.title {{
+    text-align:center;
+    font-size:18px;
+    color:#6a5acd;
+    border-bottom:2px solid #6a5acd;
+    padding-bottom:5px;
+}}
+table {{ width:100%; border-collapse:collapse; margin-top:15px; }}
+th {{
+    background:#6a5acd;
+    color:white;
+    padding:6px;
+}}
+td {{
+    padding:6px;
+    border:1px solid #ddd;
+text-align: center;
+}}
+.text-right {{ text-align:right; }}
+.total-row {{
+    background:#dcd0ff;
+    font-weight:bold;
+}}
+.footer {{
+    margin-top:80px;
+    display:flex;
+    justify-content:space-between;
+}}
+</style>
+</head>
+<body>
+
+<div style='display:flex; justify-content:space-between;'>
+<div>
+<strong>{model.CompanyName}</strong><br>
+{model.CompanyAddress}<br>
+Phone: {model.Phone}<br>
+Email: {model.Email}<br>
+GSTIN: {model.GSTIN}
+</div>
+<div>
+<img src='data:image/png;base64,{model.LogoBase64}' style='width:250px;height:70px'/>
+</div>
+</div>
+
+<h2 class='title'>Estimate</h2>
+
+<div style='display:flex; justify-content:space-between;'>
+<div>
+<strong>Estimate For</strong><br><br>
+{model.CustomerName}<br>
+GSTIN: {model.CustomerGST}
+</div>
+<div style='text-align:right;'>
+<strong>Estimate Details</strong><br><br>
+Estimate No: {model.EstimateNo}<br>
+Date: {model.EstimateDate:dd-MM-yyyy}
+</div>
+</div>
+
+<table>
+<tr>
+<th>#</th>
+<th>Item</th>
+<th>HSN</th>
+<th>Qty</th>
+<th>Unit</th>
+<th>Price</th>
+<th>Amount</th>
+</tr>
+
+{rows}
+
+<tr class='total-row'>
+<td colspan='6'>Total</td>
+<td>₹ {subTotal:N2}</td>
+</tr>
+</table>
+
+<br/>
+<strong>Scan to Pay</strong><br/>
+<img src='data:image/png;base64,{model.QrBase64}' width='150'/>
+
+<div class='footer'>
+<div>
+Bank Name: Canara Bank<br>
+Account Number: 120002057380
+</div>
+<div style='text-align:right;'>
+For: {model.CompanyName}<br><br><br>
+Authorized Signatory
+</div>
+</div>
+
+</body>
+</html>";
+        }
         public static string GenerateUpiQrBase64(
             string upiId,
             string payeeName,

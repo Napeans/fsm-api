@@ -43,6 +43,9 @@ namespace fsm_api.Controllers
                 .Where(p => p != null && p.Length > 0)
                 .ToList();
 
+
+
+
             var model = new JobReportModel
             {
                 CompanyName = "APPLOGIQ",
@@ -68,7 +71,8 @@ namespace fsm_api.Controllers
                 TechnicianNotes = "ALL AC FOAM JET SERVICE DONE...",
                 BeforeImages = beforeImage,
                 AfterImages = afterImage,
-                CompanyLogo= clientData.FirstOrDefault().ClientLogo
+                CompanyLogo= clientData.FirstOrDefault().ClientLogo,
+                CustomerSignature= data.Where(p => p.Flag == "S").FirstOrDefault().MediaData
             };
 
             var service = new JobReportPdfService();

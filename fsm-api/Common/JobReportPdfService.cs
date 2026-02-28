@@ -35,7 +35,8 @@ namespace fsm_api.Common
 
                         layers.PrimaryLayer().Column(main =>
                         {
-                            // ================= HEADER =================
+                            #region HEADER
+
                             main.Item().Container()
                                 .Background(Colors.Grey.Lighten4)
                                 .Padding(15)
@@ -87,9 +88,12 @@ namespace fsm_api.Common
                                     }
                                 });
 
+                            #endregion
+
                             main.Item().PaddingVertical(12);
 
-                            // ================= CONTACT + QUICK INFO =================
+                            #region CONTACT + QUICK INFO
+
                             main.Item().Row(row =>
                             {
                                 row.RelativeItem().Container()
@@ -129,9 +133,12 @@ namespace fsm_api.Common
                                     });
                             });
 
+                            #endregion
+
                             main.Item().PaddingVertical(10);
 
-                            // ================= JOB DETAILS =================
+                            #region JOB DETAILS
+
                             main.Item().Container()
                                 .Background(Colors.Grey.Lighten5)
                                 .Padding(12)
@@ -157,43 +164,46 @@ namespace fsm_api.Common
                                     });
                                 });
 
+                            #endregion
+
                             main.Item().PaddingVertical(10);
 
                             AddTextSection(main, "Scope Of Work", model.ScopeOfWork);
                             AddTextSection(main, "Notes", model.Notes);
                             AddTextSection(main, "Technician Notes", model.TechnicianNotes);
 
-                            // ================= SIGNATURE =================
-                            main.Item().Container()
-                                .Background(Colors.Grey.Lighten5)
-                                .Padding(12)
-                                .Column(c =>
-                                {
-                                    c.Item().Text("Acknowledgement")
-                                        .Bold()
-                                        .FontSize(12)
-                                        .FontColor(Colors.Blue.Darken2);
+                            #region CUSTOMER SIGNATURE IMAGE
 
-                                    c.Item().PaddingTop(15).Row(row =>
+                            if (model.CustomerSignature != null && model.CustomerSignature.Length > 0)
+                            {
+                                main.Item().Container()
+                                    .Background(Colors.Grey.Lighten5)
+                                    .Padding(12)
+                                    .Column(c =>
                                     {
-                                        row.RelativeItem().Column(col =>
-                                        {
-                                            col.Item().Height(40).BorderBottom(1);
-                                            col.Item().Text("Customer Signature").FontSize(9);
-                                        });
+                                        c.Item().Text("Customer Signature")
+                                            .Bold()
+                                            .FontSize(12)
+                                            .FontColor(Colors.Blue.Darken2);
 
-                                        row.RelativeItem().Column(col =>
-                                        {
-                                            col.Item().Height(40).BorderBottom(1);
-                                            col.Item().Text("Technician Signature").FontSize(9);
-                                        });
+                                        c.Item().PaddingTop(10)
+                                            .Height(80)
+                                            .AlignLeft()
+                                            .Image(model.CustomerSignature, ImageScaling.FitArea);
                                     });
-                                });
+                            }
 
-                            AddImageSection(main, "Before Images", model.BeforeImages);
-                            AddImageSection(main, "After Images", model.AfterImages);
+                            #endregion
 
-                            // ================= FOOTER =================
+                            #region BEFORE & AFTER IMAGES (NO PAGE BREAK)
+
+                            AddImages(main, "Before Images", model.BeforeImages);
+                            AddImages(main, "After Images", model.AfterImages);
+
+                            #endregion
+
+                            #region FOOTER
+
                             main.Item().AlignCenter().PaddingTop(15).Text(text =>
                             {
                                 text.Span("Generated on ")
@@ -209,13 +219,15 @@ namespace fsm_api.Common
                                 text.Span(" of ");
                                 text.TotalPages();
                             });
+
+                            #endregion
                         });
                     });
                 });
             }).GeneratePdf();
         }
 
-        // ================= HELPER METHODS =================
+        // ================= HELPERS =================
 
         private void InfoLine(ColumnDescriptor column, string label, string value)
         {
@@ -262,14 +274,12 @@ namespace fsm_api.Common
                 });
         }
 
-        private void AddImageSection(ColumnDescriptor column, string title, List<byte[]> images)
+        private void AddImages(ColumnDescriptor column, string title, List<byte[]> images)
         {
             if (images == null || images.Count == 0)
                 return;
 
-            column.Item().PageBreak();
-
-            column.Item().Text(title)
+            column.Item().PaddingTop(15).Text(title)
                 .Bold()
                 .FontSize(13)
                 .FontColor(Colors.Blue.Darken2);
@@ -284,7 +294,7 @@ namespace fsm_api.Common
                     {
                         grid.Item()
                             .Padding(5)
-                            .Height(130)
+                            .Height(110)
                             .Background(Colors.Grey.Lighten5)
                             .AlignCenter()
                             .AlignMiddle()

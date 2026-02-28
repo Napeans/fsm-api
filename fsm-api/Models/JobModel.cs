@@ -39,7 +39,9 @@ namespace fsm_api.Models
         public List<byte[]> AfterImages { get; set; }
 
         public byte[] CompanyLogo { get; set; }
-}
+        public byte[] CustomerSignature { get; set; }
+        
+    }
 
     public class ClientDetails
     {

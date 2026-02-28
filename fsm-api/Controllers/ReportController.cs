@@ -119,7 +119,7 @@ namespace fsm_api.Controllers
         State: 33-Tamil Nadu
     </div>
     <div class='logo'>
-        <img src='data:image/png;base64,{logoBase64}' />
+        <img src='data:image/png;base64,{logoBase64}' width='120'/>
     </div>
 </div>
 

@@ -21,23 +21,21 @@ namespace fsm_api.Common
                 rows.Append($@"
 <tr>
     <td>{i++}</td>
-    <td>{item.ItemName}</td>
+    <td style='text-align:left'>{item.ItemName}</td>
     <td>{item.HSN}</td>
     <td>{item.Quantity}</td>
     <td>{item.Unit}</td>
-    <td>₹ {item.Price:N2}</td>
-    <td>₹ {item.Amount:N2}</td>
+    <td style='text-align:right'>₹ {item.Price:N2}</td>
+    <td style='text-align:right'>₹ {item.Amount:N2}</td>
 </tr>");
             }
 
             decimal subTotal = model.Items.Sum(x => x.Amount);
-
             decimal discount = model.Discount;
             decimal taxableAmount = subTotal - discount;
 
             decimal sgst = taxableAmount * 0.09m;
             decimal cgst = taxableAmount * 0.09m;
-
             decimal grandTotal = taxableAmount + sgst + cgst;
 
             return $@"
@@ -45,150 +43,265 @@ namespace fsm_api.Common
 <html>
 <head>
 <meta charset='UTF-8'>
+
 <style>
-body {{ font-family: Arial; margin:20px; font-size:13px; }}
+
+@page {{
+    size: A4;
+    margin: 15mm;
+}}
+
+body {{
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size:13px;
+    color:#222;
+}}
+
+.header {{
+    display:flex;
+    justify-content:space-between;
+    border-bottom:3px solid #1f4e79;
+    padding-bottom:12px;
+}}
+
 .title {{
     text-align:center;
-    font-size:18px;
-    color:#6a5acd;
-    border-bottom:2px solid #6a5acd;
-    padding-bottom:5px;
+    font-size:22px;
+    font-weight:700;
+    margin:18px 0;
+    color:#1f4e79;
 }}
-table {{ width:100%; border-collapse:collapse; margin-top:15px; }}
+
+table {{
+    width:100%;
+    border-collapse:collapse;
+}}
+
 th {{
-    background:#6a5acd;
+    background:#1f4e79;
     color:white;
-    padding:6px;
+    padding:8px;
 }}
+
 td {{
     padding:6px;
     border:1px solid #ddd;
     text-align:center;
 }}
-.total-row {{
-    background:#dcd0ff;
-    font-weight:bold;
+
+.items-table td:nth-child(2) {{
+    text-align:left;
 }}
-.footer {{
-    margin-top:80px;
+
+.summary-section {{
+    margin-top:15px;
     display:flex;
     justify-content:space-between;
 }}
+
+.left-box {{
+    width:55%;
+    font-size:12px;
+    line-height:1.6;
+}}
+
+.right-box {{
+    width:40%;
+}}
+
+.total-table td {{
+    border:none;
+    padding:4px;
+}}
+
+.total-table {{
+    width:100%;
+}}
+
+.grand-total {{
+    font-weight:bold;
+    background:#f2f2f2;
+}}
+
+.qr-bank-section {{
+    margin-top:30px;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+}}
+
+.qr-left {{
+    width:48%;
+}}
+
+.bank-box {{
+    border:1px solid #ddd;
+    padding:8px;
+    margin-top:8px;
+    font-size:12px;
+    line-height:1.5;
+}}
+
+.signature-right {{
+    width:48%;
+    text-align:right;
+}}
+
+.footer {{
+    margin-top:25px;
+    border-top:1px solid #ccc;
+    padding-top:8px;
+    font-size:12px;
+    display:flex;
+    justify-content:space-between;
+}}
+
 </style>
 </head>
+
 <body>
 
-<div style='display:flex; justify-content:space-between;'>
-<div>
-<strong>{model.CompanyName}</strong><br>
-{model.CompanyAddress}<br>
-Phone: {model.Phone}<br>
-Email: {model.Email}<br>
-GSTIN: {model.GSTIN}
-</div>
-<div>
-<img src='data:image/png;base64,{model.LogoBase64}' style='width:250px;height:70px'/>
-</div>
+<!-- HEADER -->
+<div class='header'>
+    <div>
+        <strong>{model.CompanyName}</strong><br>
+        {model.CompanyAddress}<br>
+        Phone: {model.Phone}<br>
+        Email: {model.Email}<br>
+        GSTIN: {model.GSTIN}
+    </div>
+
+    <div>
+        <img src='data:image/png;base64,{model.LogoBase64}' 
+             style='width:180px;height:70px;'/>
+    </div>
 </div>
 
-<h2 class='title'>Estimate</h2>
+<div class='title'>TAX INVOICE</div>
 
-<div style='display:flex; justify-content:space-between;'>
-<div>
-<strong>Estimate For</strong><br><br>
+<!-- CUSTOMER -->
+<table style='margin-bottom:10px;'>
+<tr>
+<td style='border:none;text-align:left;'>
+<strong>Bill To:</strong><br>
 {model.CustomerName}<br>
 GSTIN: {model.CustomerGST}
-</div>
-<div style='text-align:right;'>
-<strong>Estimate Details</strong><br><br>
-Estimate No: {model.EstimateNo}<br>
-Date: {model.EstimateDate:dd-MM-yyyy}
-</div>
-</div>
+</td>
 
-<table>
+<td style='border:none;text-align:right;'>
+<strong>Invoice No:</strong> {model.EstimateNo}<br>
+<strong>Date:</strong> {model.EstimateDate:dd-MM-yyyy}
+</td>
+</tr>
+</table>
+
+<!-- ITEMS -->
+<table class='items-table'>
 <tr>
 <th>#</th>
-<th>Item</th>
+<th>Description</th>
 <th>HSN</th>
 <th>Qty</th>
 <th>Unit</th>
-<th>Price</th>
+<th>Rate</th>
 <th>Amount</th>
 </tr>
 
 {rows}
+
 </table>
 
-<table style='width:100%; margin-top:20px;'>
-<tr>
-<td style='width:60%; vertical-align:top; padding:10px;text-align: left;'>
+<!-- DETAILS + TOTAL -->
+<div class='summary-section'>
 
-<strong>Description</strong><br>
+<div class='left-box'>
+
+<strong>Description:</strong><br>
 {model.Description}<br><br>
 
-<strong>{model.BranchName}</strong><br>
-{model.VisitDetails}<br><br>
+<strong>Terms & Conditions:</strong><br>
+{model.Terms}<br><br>
 
-<strong>Invoice Amount In Words</strong><br>
-{model.AmountInWords}<br><br>
+<strong>Invoice Amount In Words:</strong><br>
+{model.AmountInWords}
 
-<strong>Terms And Conditions</strong><br>
-{model.Terms}
+</div>
 
-</td>
+<div class='right-box'>
 
-<td style='width:40%; vertical-align:top;'>
-
-<table style='width:100%; border-collapse:collapse;'>
+<table class='total-table'>
 <tr>
-    <td style='text-align:left;'>Sub Total</td>
-    <td style='text-align:right;'>₹ {subTotal:N2}</td>
+<td>Sub Total</td>
+<td style='text-align:right;'>₹ {subTotal:N2}</td>
 </tr>
 <tr>
-    <td style='text-align:left;'>Discount</td>
-    <td style='text-align:right;'>- ₹ {discount:N2}</td>
+<td>Discount</td>
+<td style='text-align:right;'>- ₹ {discount:N2}</td>
 </tr>
 <tr>
-    <td style='text-align:left;'>Taxable Amount</td>
-    <td style='text-align:right;'>₹ {taxableAmount:N2}</td>
+<td>Taxable Value</td>
+<td style='text-align:right;'>₹ {taxableAmount:N2}</td>
 </tr>
 <tr>
-    <td style='text-align:left;'>SGST @ 9%</td>
-    <td style='text-align:right;'>₹ {sgst:N2}</td>
+<td>SGST @9%</td>
+<td style='text-align:right;'>₹ {sgst:N2}</td>
 </tr>
 <tr>
-    <td style='text-align:left;'>CGST @ 9%</td>
-    <td style='text-align:right;'>₹ {cgst:N2}</td>
+<td>CGST @9%</td>
+<td style='text-align:right;'>₹ {cgst:N2}</td>
 </tr>
-<tr style='background:#dcd0ff; font-weight:bold;'>
-    <td style='text-align:left;'>Grand Total</td>
-    <td style='text-align:right;'>₹ {grandTotal:N2}</td>
+<tr class='grand-total'>
+<td>Grand Total</td>
+<td style='text-align:right;'>₹ {grandTotal:N2}</td>
 </tr>
 </table>
 
-</td>
-</tr>
-</table>
+</div>
 
-<div style='clear:both;'></div>
+</div>
 
-<br/>
-<strong>Payment Mode:</strong> Credit
-<br/><br/>
+<!-- QR + SIGNATURE SAME ROW -->
+<div class='qr-bank-section'>
 
-<strong>Scan to Pay</strong><br/>
-<img src='data:image/png;base64,{model.QrBase64}' width='150'/>
+<!-- LEFT: QR + BANK -->
+<div class='qr-left'>
 
+<strong>Scan to Pay</strong><br><br>
+<table><tbody><tr><td>
+   <img src='data:image/png;base64,{model.QrBase64}' 
+     width='130' />
+</td><td>
+    
+        <div>
+
+<strong>Pay To:</strong><br>
+Bank Name: Canara Bank, Tiruppur Collectorate<br>
+Account No: 120002507380<br>
+IFSC Code: CNRB0006231<br>
+Account Holder: MR HOME
+
+</div>
+</td></tr></tbody></table>
+
+</div>
+
+<!-- RIGHT: SIGNATURE -->
+<div class='signature-right'>
+
+<strong>For Mr.Home Fix</strong>
+
+<br><br><br><br>
+
+<strong>Authorized Signatory</strong>
+
+</div>
+
+</div>
+
+<!-- FOOTER -->
 <div class='footer'>
-<div>
-Bank Name: Canara Bank<br>
-Account Number: 120002057380
-</div>
-<div style='text-align:right;'>
-For: {model.CompanyName}<br><br><br>
-Authorized Signatory
-</div>
+<div>GST Invoice - Computer Generated</div>
+<div>Thank you for doing business with us</div>
 </div>
 
 </body>

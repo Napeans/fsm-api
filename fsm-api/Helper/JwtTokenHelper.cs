@@ -27,7 +27,7 @@ namespace fsm_api.Helper
                 issuer: Issuer,
                 audience: Audience,
                 claims: claims,
-                expires: DateTime.Now.AddHours(2),
+                expires: DateTime.Now.AddDays(7),
                 signingCredentials: creds
             );
 

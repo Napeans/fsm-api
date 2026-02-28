@@ -1,11 +1,14 @@
-﻿using System;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Web;
 
 namespace fsm_api.Common
 {
+
     public static class CommonMentods
     {
+
+
+ 
         public static int UserId
         {
             get

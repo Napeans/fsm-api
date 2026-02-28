@@ -5,6 +5,38 @@ using System.Web;
 
 namespace fsm_api.Models
 {
+    public class JobReportModel
+    {
+        public string CompanyName { get; set; }
+        public string Technician { get; set; }
+        public string Status { get; set; }
+        public string Location { get; set; }
+
+        public string JobNumber { get; set; }
+        public string BusinessUnit { get; set; }
+        public string ServiceType { get; set; }
+        public string BookedTime { get; set; }
+        public string ScheduledTime { get; set; }
+        public string BookedBy { get; set; }
+
+        public string Asset { get; set; }
+        public string SerialNumber { get; set; }
+        public string ModelNumber { get; set; }
+
+        public string JobStartedTime { get; set; }
+        public string JobCompletedTime { get; set; }
+        public string TotalJobTime { get; set; }
+
+        public int NoOfCrew { get; set; }
+
+        public string JobTitle { get; set; }
+        public string ScopeOfWork { get; set; }
+        public string Notes { get; set; }
+        public string TechnicianNotes { get; set; }
+
+        public List<string> BeforeImageUrls { get; set; }
+        public List<string> AfterImageUrls { get; set; }
+    }
     public class JobsModel
     {
         public int JobId { get; set; }

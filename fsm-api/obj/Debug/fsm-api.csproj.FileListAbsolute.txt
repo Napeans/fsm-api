@@ -284,3 +284,5 @@ D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\System.Security.Cryptography.Xml.xml
 D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\System.Security.Principal.Windows.xml
 D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\itext.html2pdf.dll
 D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\itext.html2pdf.xml
+D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\QRCoder.dll
+D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\QRCoder.xml

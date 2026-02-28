@@ -25,8 +25,17 @@ namespace fsm_api.Controllers
         [Route("DownloadJobReport")]
         public async Task<HttpResponseMessage> DownloadJobReport()
         {
-            string logoBase64 = "LOGO_BASE64_STRING";
-            string qrBase64 = "QR_BASE64_STRING";
+            var clientData = await _dal.GetClientDetails();
+
+            var clientFirstData = clientData.FirstOrDefault();
+
+            string qrBase64 = CommonMentods.GenerateUpiQrBase64(
+    upiId: clientFirstData.ClientUPI,
+    payeeName: clientFirstData.ClientName,
+    amount: 17700.00m,
+    note: "Estimate HF0002526047"
+);
+            string logoBase64 = Convert.ToBase64String(clientFirstData.ClientLogo);
 
             string html = $@"
 <!DOCTYPE html>
@@ -196,7 +205,7 @@ Thank you for doing business with us.
 
 <div class='footer'>
     <div>
-        <img src='data:image/png;base64,{qrBase64}' height='80'/><br>
+        <img src='data:image/png;base64,{qrBase64}' height='120'/><br>
         <strong>Pay To:</strong><br>
         Bank Name: Canara Bank, Tirupur<br>
         IFSC code: CNRB0006231<br>
@@ -223,7 +232,7 @@ Thank you for doing business with us.
 
          
 
-            var clientData = await _dal.GetClientDetails();
+        
 
             var beforeImage = data
                 .Where(p => p.Flag == "B")

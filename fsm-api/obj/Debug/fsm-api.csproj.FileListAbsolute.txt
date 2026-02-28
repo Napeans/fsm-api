@@ -213,7 +213,6 @@ D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\Microsoft.Owin.Security.Jwt.xml
 D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\Microsoft.Owin.Security.OAuth.xml
 D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\Microsoft.Owin.Host.SystemWeb.dll
 D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\Microsoft.Owin.Host.SystemWeb.xml
-D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\obj\Debug\fsm-api.csproj.AssemblyReference.cache
 D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\runtimes\linux-arm64\native\libqpdf.so
 D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\runtimes\linux-arm64\native\libQuestPdfSkia.so
 D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\runtimes\linux-musl-x64\native\libqpdf.so
@@ -286,3 +285,9 @@ D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\itext.html2pdf.dll
 D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\itext.html2pdf.xml
 D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\QRCoder.dll
 D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\QRCoder.xml
+D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\Newtonsoft.Json.Bson.dll
+D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\System.Web.Cors.dll
+D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\System.Web.Http.Cors.dll
+D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\Newtonsoft.Json.Bson.pdb
+D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\Newtonsoft.Json.Bson.xml
+D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\System.Web.Http.Cors.xml

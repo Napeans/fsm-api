@@ -37,6 +37,11 @@ note: "Estimate "+ estimate.QuotationNumber
 );
 
 
+            estimate.Description = "AMC Service Charges";
+            estimate.BranchName = "SARAVANAMPATTI BRANCH";
+            estimate.VisitDetails = "AMC 3rd VISIT";
+            estimate.AmountInWords = "Three Thousand Seven Hundred and Seventy Six Rupees only";
+            estimate.Terms = "Thank you for doing business with us.";
             estimate.QrBase64 = qrBase64;
             estimate.LogoBase64 = Convert.ToBase64String(estimate.ClientLogo);
             string html = CommonMentods.BuildHtml(estimate);

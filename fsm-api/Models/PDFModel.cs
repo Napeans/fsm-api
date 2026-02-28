@@ -41,6 +41,13 @@ namespace fsm_api.Models
         public decimal IGST { get; set; }
 
         public string QuotationNumber { get; set; }
+        public decimal Discount { get; set; } = 25;
+
+        public string Description { get; set; }
+        public string BranchName { get; set; }
+        public string VisitDetails { get; set; }
+        public string AmountInWords { get; set; }
+        public string Terms { get; set; }
     }
 
 }

@@ -32,6 +32,14 @@ namespace fsm_api.Common
 
             decimal subTotal = model.Items.Sum(x => x.Amount);
 
+            decimal discount = model.Discount;
+            decimal taxableAmount = subTotal - discount;
+
+            decimal sgst = taxableAmount * 0.09m;
+            decimal cgst = taxableAmount * 0.09m;
+
+            decimal grandTotal = taxableAmount + sgst + cgst;
+
             return $@"
 <!DOCTYPE html>
 <html>
@@ -55,9 +63,8 @@ th {{
 td {{
     padding:6px;
     border:1px solid #ddd;
-text-align: center;
+    text-align:center;
 }}
-.text-right {{ text-align:right; }}
 .total-row {{
     background:#dcd0ff;
     font-weight:bold;
@@ -111,14 +118,41 @@ Date: {model.EstimateDate:dd-MM-yyyy}
 </tr>
 
 {rows}
+</table>
 
+<table style='width:350px; float:right; margin-top:10px;'>
+<tr>
+    <td>Sub Total</td>
+    <td>₹ {subTotal:N2}</td>
+</tr>
+<tr>
+    <td>Discount</td>
+    <td>- ₹ {discount:N2}</td>
+</tr>
+<tr>
+    <td>Taxable Amount</td>
+    <td>₹ {taxableAmount:N2}</td>
+</tr>
+<tr>
+    <td>SGST @ 9%</td>
+    <td>₹ {sgst:N2}</td>
+</tr>
+<tr>
+    <td>CGST @ 9%</td>
+    <td>₹ {cgst:N2}</td>
+</tr>
 <tr class='total-row'>
-<td colspan='6'>Total</td>
-<td>₹ {subTotal:N2}</td>
+    <td>Grand Total</td>
+    <td>₹ {grandTotal:N2}</td>
 </tr>
 </table>
 
+<div style='clear:both;'></div>
+
 <br/>
+<strong>Payment Mode:</strong> Credit
+<br/><br/>
+
 <strong>Scan to Pay</strong><br/>
 <img src='data:image/png;base64,{model.QrBase64}' width='150'/>
 

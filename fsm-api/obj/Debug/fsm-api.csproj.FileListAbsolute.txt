@@ -198,7 +198,6 @@ D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\System.Net.Http.Formatting.xml
 D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\System.Web.Http.xml
 D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\System.Web.Http.WebHost.xml
 D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
-D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\obj\Debug\fsm-api.csproj.AssemblyReference.cache
 D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\obj\Debug\fsm-api.csproj.CoreCompileInputs.cache
 D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\obj\Debug\fsm-api.csproj.CopyComplete
 D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\obj\Debug\fsm-api.dll

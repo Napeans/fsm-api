@@ -134,6 +134,9 @@ WHERE QuotationId=@QuotationId
             parameters.Add("@Flag", jobMediaModel.Flag);
             parameters.Add("@Comments", jobMediaModel.Comments??"");
             parameters.Add("@SignedBy", jobMediaModel.SignedBy??"");
+            parameters.Add("@Latitude", jobMediaModel.Latitude);
+            parameters.Add("@Longitude", jobMediaModel.Longitude);
+            parameters.Add("@UserId", CommonMentods.UserId);
             return await _dataService.ExecuteAsync(
                 "InsertJobMediaBulk",
                 parameters);

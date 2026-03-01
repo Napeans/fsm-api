@@ -43,7 +43,7 @@ note: (IsEstimate?"Estimate ":"Invoice ") + estimate.QuotationNumber
             estimate.QrBase64 = qrBase64;
             estimate.LogoBase64 = Convert.ToBase64String(estimate.ClientLogo);
             estimate.ClientSignatureBase64 = Convert.ToBase64String(estimate.ClientSignature);
-            string html = CommonMentods.BuildTaxEstimateHtml(estimate);
+            string html =(IsEstimate) ?CommonMentods.BuildTaxEstimateHtml(estimate): CommonMentods.BuildTaxInvoiceHtml(estimate);
 
             byte[] pdfBytes;
 

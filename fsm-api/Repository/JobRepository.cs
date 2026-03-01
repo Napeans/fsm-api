@@ -246,6 +246,7 @@ WHERE QuotationId=@QuotationId
             parameters.Add("@TechnicianId", request.TechnicianId);
 
             return await _dataService.ExecuteAsync("dbo.Sp_UpsertJob", parameters);
+        }
         public async Task<(EstimateModel, List<EstimateItem>)> GetInvoiceData(int JobId,bool IsEstimate)
         {
             var parameters = new DynamicParameters();

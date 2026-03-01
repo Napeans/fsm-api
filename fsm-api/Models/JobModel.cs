@@ -29,6 +29,9 @@ namespace fsm_api.Models
         public DateTime?  EndTime { get; set; }
 
         public int AssignedTechnicianId { get; set; }
+        public string invoiceNumber { get; set; }
+        public decimal DueAmount { get; set; }
+        public decimal TotalPayableAmount { get; set; }
     }
     public class JobMediaModel {
         public int JobId { get; set; }
@@ -117,5 +120,15 @@ namespace fsm_api.Models
     {
         public int TechnicianId { get; set; }
         public string Name { get; set; }
+    }
+
+    public class Payment
+    {
+        public int JobId { get; set; }
+        public decimal Amount{ get; set; }
+        public string RefNumber { get; set; }
+        public string PaymentMode { get; set; }
+        public string Remarks { get; set; }
+        public DateTime PaymentDate { get; set; }
     }
 }

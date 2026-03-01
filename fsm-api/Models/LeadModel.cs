@@ -47,7 +47,7 @@ namespace fsm_api.Models
     public class LeadListItem
     {
         public int LeadId { get; set; }
-        public int LeadNumber { get; set; }
+        public string LeadNumber { get; set; }
         public string LeadStatus { get; set; } = string.Empty;
         public string CustomerName { get; set; } = string.Empty;
         public string MobileNo { get; set; } = string.Empty;
@@ -60,7 +60,7 @@ namespace fsm_api.Models
     public class LeadListViewModel
     {
         public int LeadId { get; set; }
-        public int LeadNumber { get; set; }
+        public string LeadNumber { get; set; }
         public DateTime LeadDate { get; set; }
         public DateTime? ScheduledOn { get; set; }
         public string CreatedBy { get; set; } // Maps to u.FullName
@@ -85,6 +85,7 @@ namespace fsm_api.Models
         public string DisplayAddress => $"{Area} ({Pincode})".Trim(' ', '(', ')');
         public long JobId { get; set; }
         public string JobNumber { get; set; }
+        public string ServiceName { get; set; }
     }
 
 }

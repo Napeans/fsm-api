@@ -216,5 +216,28 @@ WHERE QuotationId=@QuotationId
 
             return await _dataService.ExecuteAsync("dbo.Sp_UpsertJob", parameters);
         }
+
+        public async Task<int> UpsertJob(Payment request)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@UserID", CommonMentods.UserId);
+                parameters.Add("@JobId", request.JobId);
+                parameters.Add("@Amount", request.Amount);
+                parameters.Add("@PaymentMode", request.PaymentMode);
+                parameters.Add("@RefNumber", request.RefNumber);
+                parameters.Add("@Remarks", request.Remarks);
+                parameters.Add("@PaymentDate", request.PaymentDate);
+
+
+                return await _dataService.ExecuteAsync("dbo.Sp_UpsertPayment", parameters);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
     }
 }

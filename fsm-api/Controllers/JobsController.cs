@@ -132,5 +132,13 @@ namespace fsm_api.Controllers
 
             return Ok(result);
         }
+
+        [HttpPost]
+        [Route("payments")]
+        public async Task<IHttpActionResult> CreateJob(Payment request)
+        {
+
+            return Ok(await _dal.UpsertJob(request));
+        }
     }
 }

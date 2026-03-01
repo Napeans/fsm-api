@@ -27,7 +27,7 @@ namespace fsm_api.Controllers
         [Route("DownloadJobReport/{JobId:int}/{IsEstimate:bool}")]
         public async Task<HttpResponseMessage> DownloadJobReport(int JobId, bool IsEstimate)
         {
-            var (estimate, items) = await _dal.GetInvoiceData(1, true);
+            var (estimate, items) = await _dal.GetInvoiceData(JobId, true);
             estimate.Items = items;
 
             decimal subTotal = items.Sum(x => x.Amount);

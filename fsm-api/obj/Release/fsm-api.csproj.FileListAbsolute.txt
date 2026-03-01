@@ -287,3 +287,9 @@ D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\QuestPDF.xml
 D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\System.Security.AccessControl.xml
 D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\System.Security.Cryptography.Xml.xml
 D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\System.Security.Principal.Windows.xml
+D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\Newtonsoft.Json.Bson.dll
+D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\System.Web.Cors.dll
+D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\System.Web.Http.Cors.dll
+D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\Newtonsoft.Json.Bson.pdb
+D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\Newtonsoft.Json.Bson.xml
+D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\System.Web.Http.Cors.xml

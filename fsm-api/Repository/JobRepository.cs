@@ -28,8 +28,6 @@ namespace fsm_api.Repository
 
             return list.ToList();
         }
-
-
         public async Task<List<Items>> GetItems()
         {
             var parameters = new DynamicParameters();
@@ -202,6 +200,52 @@ namespace fsm_api.Repository
         }
 
 
+        //public async Task<(List<Mst_Scrap_Type>, List<ProductDetailsModel>)> GetProductDetails(int CityId)
+        //{
+        //    var parameters = new DynamicParameters();
+        //    parameters.Add("@CityID", CityId);
+        //    using (var multi = await _dataService.QueryMultipleAsync(
+        //        "GETProductList",
+        //        parameters,
+        //        CommandType.StoredProcedure))
+        //    {
+        //        var scrapTypes = (await multi.ReadAsync<Mst_Scrap_Type>()).AsList();
+        //        var scrapCategories = (await multi.ReadAsync<ProductDetailsModel>()).AsList();
+        //        return (scrapTypes, scrapCategories);
+        //    }
+        //}
+
+
+
+        public async Task<JobsModel> GetJobById(long JobId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@JobId", JobId);
+
+            return await _dataService.GetAsync<JobsModel>("Sp_GetJobById", parameters);
+
+        }
+
+        public async Task<List<TechnicianData>> GetTechnicians()
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@UserID", CommonMentods.UserId);
+
+            return (await _dataService.GetAllAsync<TechnicianData>("Sp_GetTechnicians", parameters)).ToList();
+
+        }
+
+        public async Task<int> UpsertJob(JobAssignRequest request)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@UserID", CommonMentods.UserId);
+            parameters.Add("@JobId", request.JobId);
+            parameters.Add("@LeadId", request.LeadId);
+            parameters.Add("@ScheduledOn", request.ScheduledOn);
+            parameters.Add("@TechnicianId", request.TechnicianId);
+
+            return await _dataService.ExecuteAsync("dbo.Sp_UpsertJob", parameters);
+        }
         public async Task<(EstimateModel, List<EstimateItem>)> GetInvoiceData(int JobId,bool IsEstimate)
         {
             var parameters = new DynamicParameters();
@@ -215,6 +259,29 @@ namespace fsm_api.Repository
                 var estimate = (await multi.ReadAsync<EstimateModel>()).FirstOrDefault();
                 var item = (await multi.ReadAsync<EstimateItem>()).AsList();
                 return (estimate, item);
+            }
+        }
+
+        public async Task<int> UpsertJob(Payment request)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@UserID", CommonMentods.UserId);
+                parameters.Add("@JobId", request.JobId);
+                parameters.Add("@Amount", request.Amount);
+                parameters.Add("@PaymentMode", request.PaymentMode);
+                parameters.Add("@RefNumber", request.RefNumber);
+                parameters.Add("@Remarks", request.Remarks);
+                parameters.Add("@PaymentDate", request.PaymentDate);
+
+
+                return await _dataService.ExecuteAsync("dbo.Sp_UpsertPayment", parameters);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
             }
         }
     }

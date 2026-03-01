@@ -4,16 +4,7 @@ using System.Linq;
 using System.Web;
 
 namespace fsm_api.Models
-{
-    public class LeadModel
-    {
-        public int LeadId { get; set; }
-        public string CustomerName { get; set; }
-        public string ServiceName { get; set; }
-        public string LeadStatus { get; set; }
-        public int? JobId { get; set; }
-    }
-
+{ 
 
     public class LeadCreateRequest
     {
@@ -51,30 +42,12 @@ namespace fsm_api.Models
         public bool IsDefault { get; set; }
     }
 
-
-    public class LeadPaginationRequest
-    {
-        // Pagination Params
-        public int PageNumber { get; set; } = 1;
-        public int PageSize { get; set; } = 10;
-
-        // Search Params
-        public string SearchTerm { get; set; } // Search by name or mobile
-        public int StatusId { get; set; }     
-        public DateTime? FromDate { get; set; }
-        public DateTime? ToDate { get; set; }
-    }
-
-    public class LeadListResponse
-    {
-        // Pagination Metadata
-        public int TotalCount { get; set; }
-        public List<LeadListItem> Leads { get; set; } = new List<LeadListItem>();
-    }
+     
 
     public class LeadListItem
     {
         public int LeadId { get; set; }
+        public string LeadNumber { get; set; }
         public string LeadStatus { get; set; } = string.Empty;
         public string CustomerName { get; set; } = string.Empty;
         public string MobileNo { get; set; } = string.Empty;
@@ -82,6 +55,37 @@ namespace fsm_api.Models
 
         // Concatenated or detailed address for the list view
         public string FullAddress { get; set; } = string.Empty;
+    }
+
+    public class LeadListViewModel
+    {
+        public int LeadId { get; set; }
+        public string LeadNumber { get; set; }
+        public DateTime LeadDate { get; set; }
+        public DateTime? ScheduledOn { get; set; }
+        public string CreatedBy { get; set; } // Maps to u.FullName
+        public DateTime CreatedAt { get; set; }
+
+        // Status Information
+        public string StatusName { get; set; } // From WorkflowStatus
+
+        // Customer Information
+        public string CustomerName { get; set; } = string.Empty;
+        public string MobileNo { get; set; } = string.Empty;
+        public string WhatsappNo { get; set; }
+
+        // Address Details
+        public string AddressType { get; set; }
+        public string Area { get; set; }
+        public string Pincode { get; set; }
+        public decimal? Latitude { get; set; }
+        public decimal? Longitude { get; set; }
+
+        // Helper property to show a combined address in the UI
+        public string DisplayAddress => $"{Area} ({Pincode})".Trim(' ', '(', ')');
+        public long JobId { get; set; }
+        public string JobNumber { get; set; }
+        public string ServiceName { get; set; }
     }
 
 }

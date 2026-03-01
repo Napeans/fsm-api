@@ -11,7 +11,7 @@ namespace fsm_api.Common
 
     public static class CommonMentods
     {
-        public static string BuildHtml(EstimateModel model)
+        public static string BuildTaxInvoiceHtml(EstimateModel model)
         {
             StringBuilder rows = new StringBuilder();
             int i = 1;
@@ -21,16 +21,17 @@ namespace fsm_api.Common
                 rows.Append($@"
 <tr>
     <td>{i++}</td>
-    <td style='text-align:left'>{item.ItemName}</td>
-    <td>{item.HSN}</td>
-    <td>{item.Quantity}</td>
-    <td>{item.Unit}</td>
-    <td style='text-align:right'>₹ {item.Price:N2}</td>
-    <td style='text-align:right'>₹ {item.Amount:N2}</td>
+    <td style='text-align:center'>{item.ItemName}</td>
+    <td style='text-align:center'>{item.HSN}</td>
+    <td style='text-align:center'>{item.Quantity}</td>
+    <td style='text-align:center'>{item.Unit}</td>
+    <td style='text-align:center'>₹ {item.Price:N2}</td>
+    <td style='text-align:center'>₹ {item.Amount:N2}</td>
 </tr>");
             }
 
             decimal subTotal = model.Items.Sum(x => x.Amount);
+            decimal Quantity = model.Items.Sum(x => x.Quantity);
             decimal discount = model.Discount;
             decimal taxableAmount = subTotal - discount;
 
@@ -208,7 +209,10 @@ GSTIN: {model.CustomerGST}
 </tr>
 
 {rows}
-
+<tr style='background: #A4C8E8;font-weight: bold;'><td></td>
+            <td style='text-align:center;font-weight:bold'>Total</td><td></td>
+             <td style='text-align:center'>{Quantity}</td><td></td><td style='text-align:right'></td>
+               <td style='text-align:center'>₹ {subTotal:N2}</td></tr>
 </table>
 
 <!-- DETAILS + TOTAL -->
@@ -307,6 +311,12 @@ Account Holder: MR HOME
 </body>
 </html>";
         }
+
+
+
+
+
+
         public static string GenerateUpiQrBase64(
             string upiId,
             string payeeName,

@@ -291,3 +291,4 @@ D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\System.Web.Http.Cors.dll
 D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\Newtonsoft.Json.Bson.pdb
 D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\Newtonsoft.Json.Bson.xml
 D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\bin\System.Web.Http.Cors.xml
+D:\APPLICATIONS\NAPEANS\fsm-api\fsm-api\obj\Debug\fsm-api.csproj.AssemblyReference.cache

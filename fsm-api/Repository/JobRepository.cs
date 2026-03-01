@@ -28,8 +28,6 @@ namespace fsm_api.Repository
 
             return list.ToList();
         }
-
-
         public async Task<List<Items>> GetItems()
         {
             var parameters = new DynamicParameters();
@@ -183,5 +181,16 @@ WHERE QuotationId=@QuotationId
         //        return (scrapTypes, scrapCategories);
         //    }
         //}
+
+
+
+        public async Task<JobsModel> GetJobById(long JobId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@JobId", JobId);
+
+            return await _dataService.GetAsync<JobsModel>("Sp_GetJobById", parameters);
+
+        }
     }
 }

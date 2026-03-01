@@ -18,9 +18,10 @@ namespace fsm_api.Repository
             _dataService = new DapperDataService();
         }
 
-        public async Task<List<LeadModel>> GetLeads()
+        public async Task<List<LeadListViewModel>> GetLeads()
         {
-            return (await _dataService.GetAllAsync<LeadModel>("Sp_GetLeads")).ToList();
+            var result = (await _dataService.GetAllAsync<LeadListViewModel>("Sp_GetLeads", new { UserId = CommonMentods.UserId })).ToList();
+            return result;
         }
 
         public async Task DeleteLead(int leadId)

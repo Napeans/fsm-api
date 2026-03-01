@@ -84,4 +84,33 @@ namespace fsm_api.Models
         public string FullAddress { get; set; } = string.Empty;
     }
 
+    public class LeadListViewModel
+    {
+        public int LeadId { get; set; }
+        public DateTime LeadDate { get; set; }
+        public DateTime? ScheduledOn { get; set; }
+        public string CreatedBy { get; set; } // Maps to u.FullName
+        public DateTime CreatedAt { get; set; }
+
+        // Status Information
+        public string StatusName { get; set; } // From WorkflowStatus
+
+        // Customer Information
+        public string CustomerName { get; set; } = string.Empty;
+        public string MobileNo { get; set; } = string.Empty;
+        public string WhatsappNo { get; set; }
+
+        // Address Details
+        public string AddressType { get; set; }
+        public string Area { get; set; }
+        public string Pincode { get; set; }
+        public decimal? Latitude { get; set; }
+        public decimal? Longitude { get; set; }
+
+        // Helper property to show a combined address in the UI
+        public string DisplayAddress => $"{Area} ({Pincode})".Trim(' ', '(', ')');
+        public long JobId { get; set; }
+        public string JobNumber { get; set; }
+    }
+
 }

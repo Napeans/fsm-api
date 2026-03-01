@@ -31,6 +31,8 @@ namespace fsm_api.Controllers
             return Ok(result);
         }
 
+
+
         [HttpGet]
         [Route("GetItems")]
         public async Task<IHttpActionResult> GetItems()
@@ -93,6 +95,16 @@ namespace fsm_api.Controllers
         public async Task<IHttpActionResult> UpdateSatus(UpdateStatusModel updateStatusModel)
         {
             var result = await _dal.UpdateSatus(updateStatusModel);
+
+            return Ok(result);
+        }
+
+
+        [HttpGet]
+        [Route("GetJobInfo/{jobId:long}")]
+        public async Task<IHttpActionResult> GetMyJobs(long jobId)
+        {
+            var result = await _dal.GetJobById(jobId);
 
             return Ok(result);
         }

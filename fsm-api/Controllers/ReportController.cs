@@ -35,7 +35,7 @@ namespace fsm_api.Controllers
 upiId: estimate.ClientUPI,
 payeeName: estimate.CompanyName,
 amount: subTotal,
-note: "Estimate " + estimate.QuotationNumber
+note: (IsEstimate?"Estimate ":"Invoice ") + estimate.QuotationNumber
 );
 
 
@@ -43,7 +43,7 @@ note: "Estimate " + estimate.QuotationNumber
             estimate.QrBase64 = qrBase64;
             estimate.LogoBase64 = Convert.ToBase64String(estimate.ClientLogo);
             estimate.ClientSignatureBase64 = Convert.ToBase64String(estimate.ClientSignature);
-            string html = CommonMentods.BuildTaxInvoiceHtml(estimate);
+            string html = CommonMentods.BuildTaxEstimateHtml(estimate);
 
             byte[] pdfBytes;
 

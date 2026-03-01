@@ -73,6 +73,11 @@ namespace fsm_api.Models
         public decimal TotalAmount { get; set; }
 
         public DateTime?  EndTime { get; set; }
+
+        public int AssignedTechnicianId { get; set; }
+        public string invoiceNumber { get; set; }
+        public decimal DueAmount { get; set; }
+        public decimal TotalPayableAmount { get; set; }
     }
     public class JobMediaModel {
         public int JobId { get; set; }
@@ -147,5 +152,29 @@ namespace fsm_api.Models
         public decimal DefaultPrice { get; set; }
 
         public bool IsActive { get; set; }
+    }
+
+    public class JobAssignRequest
+    {
+        public long LeadId { get; set; }
+        public long JobId{ get; set; }
+        public int TechnicianId { get; set; }
+        public DateTime ScheduledOn { get; set; }
+    }
+
+    public class TechnicianData
+    {
+        public int TechnicianId { get; set; }
+        public string Name { get; set; }
+    }
+
+    public class Payment
+    {
+        public int JobId { get; set; }
+        public decimal Amount{ get; set; }
+        public string RefNumber { get; set; }
+        public string PaymentMode { get; set; }
+        public string Remarks { get; set; }
+        public DateTime PaymentDate { get; set; }
     }
 }

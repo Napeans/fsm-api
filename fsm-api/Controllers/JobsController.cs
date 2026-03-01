@@ -31,6 +31,8 @@ namespace fsm_api.Controllers
             return Ok(result);
         }
 
+
+
         [HttpGet]
         [Route("GetItems")]
         public async Task<IHttpActionResult> GetItems()
@@ -95,6 +97,48 @@ namespace fsm_api.Controllers
             var result = await _dal.UpdateSatus(updateStatusModel);
 
             return Ok(result);
+        }
+
+
+        [HttpGet]
+        [Route("GetJobInfo/{jobId:long}")]
+        public async Task<IHttpActionResult> GetMyJobs(long jobId)
+        {
+            var result = await _dal.GetJobById(jobId);
+
+            return Ok(result);
+        }
+
+        [HttpPost]
+        [Route("assign")]
+        public async Task<IHttpActionResult> AssignJob(JobAssignRequest request)
+        {
+             
+            return Ok(await _dal.UpsertJob(request));
+        }
+
+        [HttpPost]
+        [Route("CreateJob")]
+        public async Task<IHttpActionResult> CreateJob(JobAssignRequest request)
+        {
+
+            return Ok(await _dal.UpsertJob(request));
+        }
+        [HttpGet]
+        [Route("technicians")]
+        public async Task<IHttpActionResult> GetTechnicians()
+        {
+            var result = await _dal.GetTechnicians();
+
+            return Ok(result);
+        }
+
+        [HttpPost]
+        [Route("payments")]
+        public async Task<IHttpActionResult> CreateJob(Payment request)
+        {
+
+            return Ok(await _dal.UpsertJob(request));
         }
     }
 }

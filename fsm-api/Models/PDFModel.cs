@@ -43,11 +43,16 @@ namespace fsm_api.Models
         public string QuotationNumber { get; set; }
         public decimal Discount { get; set; } = 25;
 
-        public string Description { get; set; }
-        public string BranchName { get; set; }
-        public string VisitDetails { get; set; }
-        public string AmountInWords { get; set; }
-        public string Terms { get; set; }
+        public string TermsText { get; set; }
+        public string TechnicianSummary { get; set; }
+
+        public string BankName { get; set; }
+        public string AccountNo { get; set; }
+        public string IFSCCode { get; set; }
+        public string AccountHolder { get; set; }
+        public byte[] ClientSignature { get; set; }
+
+        public string ClientSignatureBase64 { get; set; }
     }
 
 }

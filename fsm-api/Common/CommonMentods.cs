@@ -221,13 +221,13 @@ GSTIN: {model.CustomerGST}
 <div class='left-box'>
 
 <strong>Description:</strong><br>
-{model.Description}<br><br>
+{model.TechnicianSummary}<br><br>
 
 <strong>Terms & Conditions:</strong><br>
-{model.Terms}<br><br>
+{model.TermsText}<br><br>
 
 <strong>Invoice Amount In Words:</strong><br>
-{model.AmountInWords}
+{ConvertAmount(grandTotal)}
 
 </div>
 
@@ -279,10 +279,10 @@ GSTIN: {model.CustomerGST}
         <div>
 
 <strong>Pay To:</strong><br>
-Bank Name: Canara Bank, Tiruppur Collectorate<br>
-Account No: 120002507380<br>
-IFSC Code: CNRB0006231<br>
-Account Holder: MR HOME
+Bank Name:{model.BankName}<br>
+Account No: {model.AccountNo}<br>
+IFSC Code: {model.IFSCCode}<br>
+Account Holder: {model.AccountHolder}
 
 </div>
 </td></tr></tbody></table>
@@ -292,9 +292,12 @@ Account Holder: MR HOME
 <!-- RIGHT: SIGNATURE -->
 <div class='signature-right'>
 
-<strong>For Mr.Home Fix</strong>
+<strong>For {model.CompanyName}</strong>
 
-<br><br><br><br>
+<br>
+  <img src='data:image/png;base64,{model.ClientSignatureBase64}' 
+             style='width:180px;height:70px;'/>
+<br>
 
 <strong>Authorized Signatory</strong>
 
@@ -352,7 +355,83 @@ Account Holder: MR HOME
                 }
             }
         }
+        private static string[] unitsMap =
+    {
+        "Zero", "One", "Two", "Three", "Four", "Five", "Six",
+        "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve",
+        "Thirteen", "Fourteen", "Fifteen", "Sixteen",
+        "Seventeen", "Eighteen", "Nineteen"
+    };
 
+        private static string[] tensMap =
+        {
+        "Zero", "Ten", "Twenty", "Thirty", "Forty",
+        "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"
+    };
+
+        public static string ConvertAmount(decimal amount)
+        {
+            if (amount == 0)
+                return "Zero Rupees only";
+
+            long intPart = (long)Math.Floor(amount);
+            int decimalPart = (int)((amount - intPart) * 100);
+
+            string words = ConvertNumber(intPart) + " Rupees";
+
+            if (decimalPart > 0)
+            {
+                words += " and " + ConvertNumber(decimalPart) + " Paise";
+            }
+
+            return words + " only";
+        }
+
+        private static string ConvertNumber(long number)
+        {
+            if (number == 0)
+                return "Zero";
+
+            if (number < 0)
+                return "Minus " + ConvertNumber(Math.Abs(number));
+
+            StringBuilder words = new StringBuilder();
+
+            if ((number / 1000000) > 0)
+            {
+                words.Append(ConvertNumber(number / 1000000) + " Million ");
+                number %= 1000000;
+            }
+
+            if ((number / 1000) > 0)
+            {
+                words.Append(ConvertNumber(number / 1000) + " Thousand ");
+                number %= 1000;
+            }
+
+            if ((number / 100) > 0)
+            {
+                words.Append(ConvertNumber(number / 100) + " Hundred ");
+                number %= 100;
+            }
+
+            if (number > 0)
+            {
+                if (words.Length != 0)
+                    words.Append("");
+
+                if (number < 20)
+                    words.Append(unitsMap[number]);
+                else
+                {
+                    words.Append(tensMap[number / 10]);
+                    if ((number % 10) > 0)
+                        words.Append(" " + unitsMap[number % 10]);
+                }
+            }
+
+            return words.ToString().Trim();
+        }
         public static int UserId
         {
             get

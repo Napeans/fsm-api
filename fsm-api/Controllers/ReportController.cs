@@ -14,7 +14,7 @@ using System.Web.Http;
 
 namespace fsm_api.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [RoutePrefix("api/report")]
     public class ReportController : ApiController
     {

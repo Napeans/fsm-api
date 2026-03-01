@@ -26,21 +26,28 @@ namespace fsm_api.Controllers
         [AllowAnonymous]
         public async Task<IHttpActionResult> Login(LoginModel model)
         {
+          
             // 1️⃣ Validate input
             if (model == null || string.IsNullOrEmpty(model.Username) || string.IsNullOrEmpty(model.Password))
                 return BadRequest("Invalid login request");
 
-            if (model.Username!="9698323236" ||   model.Password != "4321") {
+          
+            var user = await _dal.Login(model);
+
+            if (user.Count() == 0 || model.Password != "4321")
+            {
                 return BadRequest("Invalid login request");
             }
-
 
             // 2️⃣ Authenticate user (your DB logic)
             if (user == null)
                 return Unauthorized();
 
+
+
+            var userData = user.FirstOrDefault();
             // 3️⃣ Generate tokens
-            var accessToken = JwtTokenHelper.GenerateToken(user.UserId, user.MobileNumber.ToString());
+            var accessToken = JwtTokenHelper.GenerateToken(userData.UserId, userData.MobileNumber);
             var refreshToken = RefreshTokenHelper.Generate();
 
             // 4️⃣ Capture device & request metadata
@@ -48,7 +55,7 @@ namespace fsm_api.Controllers
 
             // 5️⃣ Save refresh token (device-bound)
             await _dal.SaveRefreshToken(
-                 user.UserId,
+                 userData.UserId,
                  refreshToken,
                  deviceId
              );

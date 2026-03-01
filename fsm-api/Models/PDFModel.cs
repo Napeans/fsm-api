@@ -41,7 +41,7 @@ namespace fsm_api.Models
         public decimal IGST { get; set; }
 
         public string QuotationNumber { get; set; }
-        public decimal Discount { get; set; } = 25;
+        public decimal Discount { get; set; }
 
         public string TermsText { get; set; }
         public string TechnicianSummary { get; set; }

@@ -14,7 +14,7 @@ using System.Web.Http;
 
 namespace fsm_api.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [RoutePrefix("api/report")]
     public class ReportController : ApiController
     {
@@ -27,7 +27,7 @@ namespace fsm_api.Controllers
         [Route("DownloadJobReport/{JobId:int}/{IsEstimate:bool}")]
         public async Task<HttpResponseMessage> DownloadJobReport(int JobId, bool IsEstimate)
         {
-            var (estimate, items) = await _dal.GetInvoiceData(1, true);
+            var (estimate, items) = await _dal.GetInvoiceData(JobId, true);
             estimate.Items = items;
 
             decimal subTotal = items.Sum(x => x.Amount);
@@ -43,7 +43,7 @@ note: (IsEstimate?"Estimate ":"Invoice ") + estimate.QuotationNumber
             estimate.QrBase64 = qrBase64;
             estimate.LogoBase64 = Convert.ToBase64String(estimate.ClientLogo);
             estimate.ClientSignatureBase64 = Convert.ToBase64String(estimate.ClientSignature);
-            string html = CommonMentods.BuildTaxEstimateHtml(estimate);
+            string html =(IsEstimate) ?CommonMentods.BuildTaxEstimateHtml(estimate): CommonMentods.BuildTaxInvoiceHtml(estimate);
 
             byte[] pdfBytes;
 

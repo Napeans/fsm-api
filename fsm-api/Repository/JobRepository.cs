@@ -43,7 +43,7 @@ namespace fsm_api.Repository
         {
             var parameters = new DynamicParameters();
             parameters.Add("@QuotationId", QuotationId);
-            string query = @"select a.QuotationItemId,a.ItemId,b.ItemName,a.UnitPrice,a.Quantity,a.TotalPrice from [QuotationItems] 
+            string query = @"select a.QuotationItemId,a.ItemId,b.ItemName,a.UnitPrice,a.Quantity from [QuotationItems] 
 as a inner join [Items] as b on a.ItemId=b.ItemId
 WHERE QuotationId=@QuotationId
 ";
@@ -57,15 +57,8 @@ WHERE QuotationId=@QuotationId
 
         public async Task<List<JobMediaResponseModel>> GetJobMedia(int JobId)
         {
-            var parameters = new DynamicParameters();
-            parameters.Add("@JobId", JobId);
-            string query = @"SELECT MediaId, MediaData,Flag FROM JobMedia WHERE JobId = @JobId";
 
-
-            var list = await _dataService.GetAllAsync<JobMediaModel>(query, parameters);
-
-            var result = list.ToList();
-
+            var result= await getJobMediaData(JobId);
             var mediaList = new List<JobMediaResponseModel>();
 
             foreach (var item in result)
@@ -84,18 +77,56 @@ WHERE QuotationId=@QuotationId
 
             return mediaList;
         }
+        public async Task<List<JobMediaModel>> getJobMediaData(int JobId) {
 
+            var parameters = new DynamicParameters();
+            parameters.Add("@JobId", JobId);
+            string query = @"SELECT MediaId, MediaData,Flag FROM JobMedia WHERE JobId = @JobId";
+
+
+            var list = await _dataService.GetAllAsync<JobMediaModel>(query, parameters);
+
+            var result = list.ToList();
+
+            return result;
+        }
+
+        public async Task<List<JobMediaModel>> getClientDetails(int JobId)
+        {
+
+            var parameters = new DynamicParameters();
+            parameters.Add("@JobId", JobId);
+            string query = @"SELECT MediaId, MediaData,Flag FROM JobMedia WHERE JobId = @JobId";
+
+
+            var list = await _dataService.GetAllAsync<JobMediaModel>(query, parameters);
+
+            var result = list.ToList();
+
+            return result;
+        }
+
+
+        public async Task<List<ClientDetails>> GetClientDetails()
+        {
+
+            var parameters = new DynamicParameters();
+            string query = @"select top 1 * from ClientDetails";
+
+
+            var list = await _dataService.GetAllAsync<ClientDetails>(query, parameters);
+
+            var result = list.ToList();
+
+            return result;
+        }
         public async Task<int> CreateQuotation(CreateQuotation createQuotation)
         {
             var parameters = new DynamicParameters();
             parameters.Add("@JobId", createQuotation.JobId);
-            parameters.Add("@SubTotal", createQuotation.SubTotal);
             parameters.Add("@DiscountValue", createQuotation.DiscountValue);
-            parameters.Add("@CGST", createQuotation.CGST);
-            parameters.Add("@SGST", createQuotation.SGST);
-            parameters.Add("@TotalAmount", createQuotation.TotalAmount);
-            parameters.Add("@Status", createQuotation.Status);
             parameters.Add("@CreatedBy", CommonMentods.UserId);
+            parameters.Add("@Status", createQuotation.Status);
             parameters.Add("@Items", createQuotation.Items);
 
 
@@ -215,6 +246,20 @@ WHERE QuotationId=@QuotationId
             parameters.Add("@TechnicianId", request.TechnicianId);
 
             return await _dataService.ExecuteAsync("dbo.Sp_UpsertJob", parameters);
+        public async Task<(EstimateModel, List<EstimateItem>)> GetInvoiceData(int JobId,bool IsEstimate)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@JobId", JobId);
+            parameters.Add("@IsEstimate", IsEstimate);
+            using (var multi = await _dataService.QueryMultipleAsync(
+                "Sp_GetInvoiceData",
+                parameters,
+                CommandType.StoredProcedure))
+            {
+                var estimate = (await multi.ReadAsync<EstimateModel>()).FirstOrDefault();
+                var item = (await multi.ReadAsync<EstimateItem>()).AsList();
+                return (estimate, item);
+            }
         }
     }
 }

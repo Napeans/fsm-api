@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using fsm_api.Common;
+using fsm_api.Controllers;
 using fsm_api.Models;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,19 @@ namespace fsm_api.Repository
         public UserRepository()
         {
             _dataService = new DapperDataService();
+        }
+        public async Task<IEnumerable<Users>> Login(LoginModel model)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@MobileNumber", model.Username);
+
+
+            return await _dataService.GetAllAsync<Users>(
+                "SELECT top 1 *  FROM users where MobileNumber=@MobileNumber",
+                parameters
+            );
+
+
         }
         public async Task<int> SaveRefreshToken(int userId, string token, string deviceId)
         {

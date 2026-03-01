@@ -5,7 +5,30 @@ using System.Web;
 
 namespace fsm_api.Models
 {
+    public class Users
+    {
+        public int UserId { get; set; }
 
+        public string FullName { get; set; }
+
+        public string MobileNumber { get; set; }
+
+        public string Email { get; set; }
+
+        public string PasswordHash { get; set; }
+
+        public int RoleId { get; set; }
+
+        public bool IsActive { get; set; }
+
+        public DateTime CreatedAt { get; set; }
+
+        public int CreatedBy { get; set; }
+
+        public int CustomerId { get; set; }
+
+        public int ClientId { get; set; }
+    }
     public class RefreshTokens
     {
         public int Id { get; set; }

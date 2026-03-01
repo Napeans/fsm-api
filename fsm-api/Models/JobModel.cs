@@ -90,7 +90,9 @@ namespace fsm_api.Models
         public string SignedBy { get; set; }
         public decimal Latitude { get; set; }
         public decimal Longitude { get; set; }
+        public decimal Discount { get; set; }
 
+        public int QuotationId { get; set; }
         public int UserId { get; set; }
     }
     public class CreateQuotation
@@ -142,6 +144,7 @@ namespace fsm_api.Models
         public decimal UnitPrice { get; set; }
         public decimal Quantity { get; set; }
         public decimal TotalPrice { get; set; }
+        public decimal Discount { get; set; }
     }
     public class Items
     {

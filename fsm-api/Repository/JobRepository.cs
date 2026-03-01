@@ -43,10 +43,7 @@ namespace fsm_api.Repository
         {
             var parameters = new DynamicParameters();
             parameters.Add("@QuotationId", QuotationId);
-            string query = @"select a.QuotationItemId,a.ItemId,b.ItemName,a.UnitPrice,a.Quantity from [QuotationItems] 
-as a inner join [Items] as b on a.ItemId=b.ItemId
-WHERE QuotationId=@QuotationId
-";
+            string query = @"Sp_GetQuotationItems";
 
 
             var list = await _dataService.GetAllAsync<QuotationItem>(query, parameters);
@@ -167,6 +164,8 @@ WHERE QuotationId=@QuotationId
             parameters.Add("@SignedBy", jobMediaModel.SignedBy??"");
             parameters.Add("@Latitude", jobMediaModel.Latitude);
             parameters.Add("@Longitude", jobMediaModel.Longitude);
+            parameters.Add("@Discount", jobMediaModel.Discount);
+            parameters.Add("@QuotationId", jobMediaModel.QuotationId);
             parameters.Add("@UserId", CommonMentods.UserId);
             return await _dataService.ExecuteAsync(
                 "InsertJobMediaBulk",
@@ -180,7 +179,7 @@ WHERE QuotationId=@QuotationId
             parameters.Add("@ItemId", quotationItemsModel.ItemId);
             parameters.Add("@Quantity", quotationItemsModel.Quantity);
             parameters.Add("@Flag", quotationItemsModel.Flag);
-
+            parameters.Add("@UserID", CommonMentods.UserId);
 
             return await _dataService.ExecuteAsync("Sp_AddOrRemoveQuotationItems", parameters);
         }

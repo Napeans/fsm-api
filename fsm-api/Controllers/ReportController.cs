@@ -35,18 +35,15 @@ namespace fsm_api.Controllers
 upiId: estimate.ClientUPI,
 payeeName: estimate.CompanyName,
 amount: subTotal,
-note: "Estimate " + estimate.QuotationNumber
+note: (IsEstimate?"Estimate ":"Invoice ") + estimate.QuotationNumber
 );
 
 
-            estimate.Description = "AMC Service Charges";
-            estimate.BranchName = "SARAVANAMPATTI BRANCH";
-            estimate.VisitDetails = "AMC 3rd VISIT";
-            estimate.AmountInWords = "Three Thousand Seven Hundred and Seventy Six Rupees only";
-            estimate.Terms = "Thank you for doing business with us.";
+          
             estimate.QrBase64 = qrBase64;
             estimate.LogoBase64 = Convert.ToBase64String(estimate.ClientLogo);
-            string html = CommonMentods.BuildHtml(estimate);
+            estimate.ClientSignatureBase64 = Convert.ToBase64String(estimate.ClientSignature);
+            string html = CommonMentods.BuildTaxEstimateHtml(estimate);
 
             byte[] pdfBytes;
 

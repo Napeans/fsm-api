@@ -195,5 +195,26 @@ WHERE QuotationId=@QuotationId
             return await _dataService.GetAsync<JobsModel>("Sp_GetJobById", parameters);
 
         }
+
+        public async Task<List<TechnicianData>> GetTechnicians()
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@UserID", CommonMentods.UserId);
+
+            return (await _dataService.GetAllAsync<TechnicianData>("Sp_GetTechnicians", parameters)).ToList();
+
+        }
+
+        public async Task<int> UpsertJob(JobAssignRequest request)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@UserID", CommonMentods.UserId);
+            parameters.Add("@JobId", request.JobId);
+            parameters.Add("@LeadId", request.LeadId);
+            parameters.Add("@ScheduledOn", request.ScheduledOn);
+            parameters.Add("@TechnicianId", request.TechnicianId);
+
+            return await _dataService.ExecuteAsync("dbo.Sp_UpsertJob", parameters);
+        }
     }
 }

@@ -108,5 +108,29 @@ namespace fsm_api.Controllers
 
             return Ok(result);
         }
+
+        [HttpPost]
+        [Route("assign")]
+        public async Task<IHttpActionResult> AssignJob(JobAssignRequest request)
+        {
+             
+            return Ok(await _dal.UpsertJob(request));
+        }
+
+        [HttpPost]
+        [Route("CreateJob")]
+        public async Task<IHttpActionResult> CreateJob(JobAssignRequest request)
+        {
+
+            return Ok(await _dal.UpsertJob(request));
+        }
+        [HttpGet]
+        [Route("technicians")]
+        public async Task<IHttpActionResult> GetTechnicians()
+        {
+            var result = await _dal.GetTechnicians();
+
+            return Ok(result);
+        }
     }
 }
